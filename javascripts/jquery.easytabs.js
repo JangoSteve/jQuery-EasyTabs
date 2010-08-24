@@ -7,23 +7,24 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Thu Aug 19 15:29:00 2010 -0500
+ * Date: Thu Aug 24 01:02:00 2010 -0500
  */
 (function($) {
   $.fn.easyTabs = function(options) {
 
     var opts = $.extend({}, $.fn.easyTabs.defaults, options);
-    
+
     selectDefaultTab = function(tabs){
       selectedTab = tabs.find("a[href='" + window.location.hash + "']").parent();
       if(selectedTab.size() == 1){
         defaultTab = selectedTab;
+        opts.cycle = false;
       }else{
         defaultTab = $(tabs.parent().find(opts.defaultTab));
       }
       return defaultTab;
     }
-    
+
     selectTab = function(tabs,panels,clicked){
       if(opts.animate){
         panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass).fadeOut(opts.animationSpeed, function(){
@@ -35,6 +36,14 @@
       }
       tabs.removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
       clicked.parent().addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
+    }
+
+    cycleTabs = function(tabs,panels,tabNumber){
+      if(opts.cycle){
+        tabNumber = tabNumber % tabs.size();
+        selectTab(tabs,panels,$(tabs[tabNumber]).children("a"));
+        setTimeout(function(){cycleTabs(tabs,panels,(tabNumber + 1));}, opts.cycle);
+      }
     }
 
     return this.each(function() {
@@ -52,6 +61,7 @@
       defaultTab.addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
 
       tabs.children("a").click(function() {
+        opts.cycle = false;
         var clicked = $($(this));
         if(clicked.hasClass(opts.tabActiveClass)){ return false; }
         selectTab(tabs,panels,clicked);
@@ -60,7 +70,7 @@
         }
         return false;
       });
-      
+
       // enabling back-button with jquery.hashchange plugin
       // http://benalman.com/projects/jquery-hashchange-plugin/
       if(typeof $(window).hashchange == 'function'){
@@ -72,10 +82,12 @@
           selectTab(tabs,panels,selectDefaultTab(tabs).children("a"));
         })
       }
-      
+
+      cycleTabs(tabs,panels,0);
+
     });
 
   }
 
-  $.fn.easyTabs.defaults = {animate: true, panelActiveClass: "active", tabActiveClass: "active", defaultTab: "li:first-child", animationSpeed: "normal", tabs: "> ul > li", updateHash: true}
+  $.fn.easyTabs.defaults = {animate: true, panelActiveClass: "active", tabActiveClass: "active", defaultTab: "li:first-child", animationSpeed: "normal", tabs: "> ul > li", updateHash: true, cycle: false}
 })(jQuery);
