@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"> 
+	<head profile="http://gmpg.org/xfn/11"> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+		 
+		<title>JQuery EasyTabs Demo &#8211; Bottom Tabs &#45; Alfa Jango Blog</title> 
+		<script src="../javascripts/jquery-1.4.2.min.js" type="text/javascript"></script> 
+		<script src="../javascripts/jquery.easytabs.js" type="text/javascript"></script>
+		<style>
+			#tab-container { width: 600px; padding: 0; }
+			#tab-container ul { list-style: none; margin: 0; padding: 0; width: 600px; }
+			#tab-container ul li { float: left; width: 200px; margin: 0; padding: 0; text-align: center; border-top: solid 1px; }
+			#tab-container ul li a { display: block; padding: 15px 0; outline: none; }
+			#tab-container ul li a:hover { text-decoration: underline; }
+			#tab-container ul li.active { width: 198px; background: #fff; border: solid 1px; border-top: none; }
+			#tab-container ul li a.active { font-weight: bold; text-decoration: none; }
+			#tab-container .panel-container { border: solid 1px; border-bottom: none; padding: 10px; }
+		</style>
+		<script type="text/javascript"> 
+		  $(document).ready(function(){ $('#tab-container').easyTabs({
+		    animationSpeed: 2000,
+		    defaultTab: "li#the-second-tab"
+		  }); });
+		</script>
+	</head>
+	<body>
+		<div id="tab-container">
+		  <div class="panel-container">
+		    <div id="tab-1-div">
+		      <h2>Heading 1</h2>
+		      <p>This is the content of the first tab.</p>
+		    </div>
+		    <div id="that-other-tab">
+		      <h2>Configuration</h2>
+		      <p>This example displays the second tab by default. Also, the tab-switching animation is slowed down to 4 seconds (2sec fade-out and 2sec fade-in).</p>
+		    </div>
+		    <div id="lastly">
+		      <h2>Heading 3</h2>
+		      <p>More stuff from the last tab.</p>
+		    </div>
+		  </div>
+		  <ul>
+		    <li><a href="#tab-1-div">Tab 1</a></li>
+		    <li id="the-second-tab"><a href="#that-other-tab">The Second Tab</a></li>
+		    <li><a href="#lastly">Tab C</a></li>
+		    <br style="clear:both;" />
+		  </ul>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,205 @@
+
+jQuery EasyTabs plugin 1.1
+
+Copyright (c) 2010 Steve Schwartz (JangoSteve)
+
+Dual licensed under the MIT and GPL licenses:
+  http://www.opensource.org/licenses/mit-license.php
+  http://www.gnu.org/licenses/gpl.html
+
+Date: Thu Aug 19 15:29:00 2010 -0500
+
+
+-------------------------------------------------------------------------------------------
+
+VIEW THIS DOCUMENTATION ONLINE AT: http://www.alfajango.com/blog/jquery-easytabs-plugin/
+
+VIEW UPDATES AND NEW FEATURES FOR V1.1 AT: http://www.alfajango.com/blog/jquery-easytabs-plugin-now-more-flexible-and-usable
+
+DOWNLOAD JQUERY EASYTABS AT: http://plugins.jquery.com/project/easytabs
+
+-------------------------------------------------------------------------------------------
+
+JQuery EasyTabs Plugin
+
+
+Anyone that has used the tabs functionality included in JQuery UI knows that it's a great tool that allows you to create great-looking themed tabs right out of the box. However, if you have need to customize those tabs significantly for your site, it can be a real pain.
+
+After struggling to create highly customized tabs (custom layout, tabs below the content, etc.), we finally decided to create our own plugin. Rather than styling and arranging your tabs for you, like JQuery UI tabs, this plugin handles only the functionality of the tabs, and leaves the styling to you. With EasyTabs, you control the styling via your own CSS. Let's get started!
+
+UPDATE: This plugin now supports more flexible tab layout, bookmarking, and back- and forward-button support for browsers. <a href="http://www.alfajango.com/blog/jquery-easytabs-plugin-now-more-flexible-and-usable">Read more here</a>.
+
+
+<a href="http://plugins.jquery.com/project/easytabs">View EasyTabs Plugin on jQuery.com</a>
+<a href="#demos">Skip to EasyTabs Demos</a>
+
+## What EasyTabs Does:
+
+- Creates tabs from an unordered list, which link to divs on the page
+- Allows complete customization of appearance, layout, and style in  your CSS
+
+## What EasyTabs Does NOT Do:
+
+- Style your tabs in any way (not through javascript or CSS)
+- Load AJAX content, or anything not already on the page
+
+## Documentation
+
+- <a href="#installation">Installation</a>
+- <a href="#stylization">Stylization</a>
+- <a href="#configuration-options">Configuration Options</a>
+- <a href="#demos">Demos</a>
+
+## Installation
+### The HTML
+
+Unlike JQuery UI tabs, the HTML markup for your tabs and content can be arranged however you want. At the minimum, you need a container, an unordered list of links for your tabs, and matching divs for your tabbed content.
+
+<div id="tab-container">
+  <ul>
+    <li><a href="#tab-1-div">Tab 1</a></li>
+    <li><a href="#that-other-tab">The Second Tab</a></li>
+    <li><a href="#lastly">Tab C</a></li>
+  </ul>
+  <div id="tab-1-div">
+    <h2>Heading 1</h2>
+    <p>This is the content of the first tab.</p>
+  </div>
+    <div id="that-other-tab">
+    <h2>Heading 2</h2>
+    <p>Stuff from the second tab.</p>
+  </div>
+  <div id="lastly">
+    <h2>Heading 3</h2>
+    <p>More stuff from the last tab.</p>
+  </div>
+</div>
+
+### The Javascript
+
+UPDATE: To enable back- and forward-button support for the users' browsers, be sure to include either the<a href="http://benalman.com/projects/jquery-hashchange-plugin/"> jQuery HashChange plugin</a> (recommended) or the <a href="http://www.asual.com/jquery/address/docs/">Address plugin</a> before including the EasyTabs plugin. There is no other configuration required, it will just work!
+
+<script src="/javascripts/jquery.js" type="text/javascript"></script> 
+<script src="/javascripts/jquery.hashchange.js" type="text/javascript"></script> 
+<script src="/javascripts/jquery.easytabs.js" type="text/javascript"></script>  
+
+<script type="text/javascript"> 
+  $(document).ready(function(){ $('#tab-container').easyTabs(); });
+</script> 
+
+I varied the tab [ccie_html]id[/ccie_html]s and names just to show you how flexible this is. There is no magic going on with this plugin; it's not trying to guess the order of your tabs or what tab is associated with which [ccie_html]<div>[/ccie_html]. Just make the [ccie_html]id[/ccie_html] of the content [ccie_html]<div>[/ccie_html] match the [ccie_html]href[/ccie_html] of the tab link.
+
+### Required Markup
+
+	The only rules you need to follow are these:
+
+- containing [ccie_html]<div>[/ccie_html] with a unique [ccie_html]id[/ccie_html]
+- the container [ccie_html]<div>[/ccie_html] contains an unordered list [ccie_html]<ul>[/ccie_html] of links [ccie_html]<a>[/ccie_html]
+<span class="note">UPDATE: As of version 1.1, this is no longer the case. You can now include your tabs anywhere within the container. It can be a [ccie_html]<ul>[/ccie_html], [ccie_html]<ol>[/ccie_html], [ccie_html]<div>[/ccie_html], or anything you want. The default is still a top-level [ccie_html]<ul>[/ccie_html], so to change it you just specify your selector with the new <a href="#configuration-options">[ccie_js]tabs[/ccie_js] option</a>.</span>
+- the container div also contains content divs (for the tabbed content), each div has a unique [ccie_html]id[/ccie_html] that matches the href property of a link in the unordered list
+
+Other than that, go nuts. The order of the elements does NOT matter. Your [ccie_html]<ul>[/ccie_html] could be before or after the content divs (or even between them). You can put non-tabbed content between the elements. It doesn't matter. Just make sure that the [ccie_html]<ul>[/ccie_html] is a direct descendant of the container [ccie_html]<div>[/ccie_html].
+
+div#tab-container > ul > a
+div#tab-container div#tab-1
+div#tab-container div#second-tab
+
+## Styling Tabs and Content
+
+To style your tabs, you simply use your own CSS classes and stylesheet. Here's some very basic styling to get you started:
+
+#tab-container ul { margin: 0; padding: 0; }
+#tab-container ul li { display: inline-block; background: #ccc; border: solid 1px; border-bottom: none; }
+#tab-container ul li a { display: block; padding: 5px; outline: none; }
+#tab-container ul li a:hover { text-decoration: underline; }
+#tab-container ul li.active { background: #fff; padding-top: 6px; position: relative; top: 1px; }
+#tab-container ul li a.active { font-weight: bold; }
+#tab-container .panel-container { border: solid 1px; padding: 0 10px; }
+
+The only changes EasyTabs makes is to the class name "active" to the currently-selected content [ccie_html]<div>[/ccie_html] and tab [ccie_html]<li>[/ccie_html] element. Also, any element inside of the currently-selected tab [ccie_html]<li>[/ccie_html] element also gets the "active" class name added. This makes it easier to style the active tabs exactly the way you need. So, for instance, if your tab list looked like this:
+
+<ul>
+  <li><a href="#tab-1">Tab 1</li>
+  <li><a href="#tab-2">Tab 2</li>
+</ul>
+
+And then you click on the first tab link, your markup will now look like this:
+
+<ul>
+  <li class="active"><a class="active" href="#tab-1">Tab 1</li>
+  <li><a href="#tab-2">Tab 2</li>
+</ul>
+
+## Configuration Options
+
+EasyTabs comes with some configuration options as well, to make it even easier to style and customize.
+
+### Available Options
+<table>
+	<thead>
+		<th>Option</th>
+		<th>Description</th>
+		<th>Values</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>animate</td>
+			<td>Makes content panels fade out and in when a new tab is clicked.</td>
+			<td>true | false<br />(default: true)</td>
+		</tr>
+		<tr>
+			<td>animationSpeed</td>
+			<td>Controls the speed of the fading effect if animate is true.</td>
+			<td>"slow" | "normal" | "fast" | integer (in milliseconds)<br />(default: "normal")</td>
+		</tr>
+		<tr>
+			<td>defaultTab</td>
+			<td>Selects the [ccie_html]<li>[/ccie_html] tab to activate when page first loads.</td>
+			<td>any single jquery selector (e.g. "li:first-child", "li#tab-2")<br />(default: "li:first-child")</td>
+		</tr>
+		<tr>
+			<td>panelActiveClass</td>
+			<td>Adds specified class to the currently-selected content [ccie_html]<div>[/ccie_html]</td>
+			<td>any class name string (e.g. "active", "selected")<br />(default: "active")</td>
+		</tr>
+		<tr>
+			<td>tabActiveClass</td>
+			<td>Adds specified class to the currently-selected tab [ccie_html]<li>[/ccie_html] (and it's descendants).</td>
+			<td>any class name string (e.g. "active", "selected")<br />(default: "active")</td>
+		</tr>
+                 <tr>
+			<td>tabs</td>
+			<td>The container element for your tabs, relative to the container element that easyTabs was applied to.</td>
+			<td>any jquery selector referencing your collection of tabs (e.g. "ul#tabs > li", "div#tab-container > span")<br />(default: "> ul > li", which selects the top-level [ccie_html]<ul>[/ccie_html] within the container element)</td>
+		</tr>
+                <tr>
+			<td>updateHash</td>
+			<td>Tells easyTabs whether or not to update the browser window's URL hash, useful for SEO and bookmarking.</td>
+			<td>true | false (default: true)</td>
+		</tr>
+	</tbody>
+</table>
+
+The [ccie_js]tabs[/ccie_js] and [ccie_js]updateHash[/ccie_js] options were added in version 1.1. Make sure you have the most up-to-date version of EasyTabs by getting it from the <a href="http://plugins.jquery.com/project/easytabs">jQuery plugin page</a>.
+
+	Here's an example that uses all of the configuration options:
+
+
+$("#tab-container").easyTabs({
+  animate: true,
+  animationSpeed: 5000,
+  defaultTab: "li#tab-2",
+  panelActiveClass: "active-content-div",
+  tabActiveClass: "selected-tab",
+  tabs: "> div > span",
+  updateHash: true
+});
+
+## Demos
+Here are some demonstrations, using various styles and configuration arrangements.
+
+- <a href="http://www.alfajango.com/blog/jquery-easytabs-plugin/demo-basic/">Basic demo</a>
+- <a href="http://www.alfajango.com/blog/jquery-easytabs-plugin/demo-bottom-tabs/">Tabs on the bottom demo (with configuration options)</a>
+- <a href="http://www.alfajango.com/blog/jquery-easytabs-plugin/demo-side-tabs/">Side tabs demo (with configuration options)</a>
+- <a href="http://www.alfajango.com/blog/jquery-easytabs-plugin/demo-disconnected-content/">Disconnected tabs and tabbed content demo</a>
+- <a href="http://www.alfajango.com/blog/jquery-easytabs-plugin/demo-multiple-on-same-page/">Multiple tabs on the same page demo (with configuration options)</a>
