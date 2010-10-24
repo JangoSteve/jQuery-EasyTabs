@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 1.1
+ * jQuery EasyTabs plugin 2.0
  *
  * Copyright (c) 2010 Steve Schwartz (JangoSteve)
  *
@@ -10,8 +10,10 @@
  * Date: Thu Aug 24 01:02:00 2010 -0500
  */
 (function($) {
-    
-  $.fn.easyTabs = function(options) {
+  
+  $.fn.easyTabs = function(){ $.error("easyTabs() is no longer used. Now use easytabs() -- no capitalization."); }
+  
+  $.fn.easytabs = function(options) {
     
     var args = arguments;
 
@@ -21,13 +23,13 @@
       
       // Initialization was called with $(el).easytabs( { options } ); 
       if ( ! data ) {
-        $.fn.easyTabs.methods.init.apply($container,[options]);
+        $.fn.easytabs.methods.init.apply($container,[options]);
         
         // enabling back-button with jquery.hashchange plugin
         // http://benalman.com/projects/jquery-hashchange-plugin/
         if(typeof $(window).hashchange == 'function'){
           $(window).hashchange( function(){
-            $.fn.easyTabs.methods.selectTabFromHashChange.apply($container);
+            $.fn.easytabs.methods.selectTabFromHashChange.apply($container);
           });
         }else if($.address && typeof $.address.change == 'function'){ // back-button with jquery.address plugin http://www.asual.com/jquery/address/docs/
           $.address.change( function(){
@@ -37,19 +39,19 @@
         
         if (opts.cycle) {
           tabNumber = $tabs.index($defaultTab);
-          setTimeout( function(){ $.fn.easyTabs.methods.cycleTabs.apply($container, [tabNumber + 1]); }, opts.cycle);
+          setTimeout( function(){ $.fn.easytabs.methods.cycleTabs.apply($container, [tabNumber + 1]); }, opts.cycle);
         }
         
       }
       
       // User called public method
-      if ( $.fn.easyTabs.publicMethods[options] ){
-        return $.fn.easyTabs.publicMethods[ options ].apply( $container, Array.prototype.slice.call( args, 1 ));
+      if ( $.fn.easytabs.publicMethods[options] ){
+        return $.fn.easytabs.publicMethods[ options ].apply( $container, Array.prototype.slice.call( args, 1 ));
       }
     });
   }
   
-  $.fn.easyTabs.defaults = {
+  $.fn.easytabs.defaults = {
     animate: true, 
     panelActiveClass: "active", 
     tabActiveClass: "active", 
@@ -60,10 +62,10 @@
     cycle: false
   }
   
-  $.fn.easyTabs.methods = {
+  $.fn.easytabs.methods = {
     init: function(options){
       var $container = this;
-      opts = $.extend({}, $.fn.easyTabs.defaults, options),
+      opts = $.extend({}, $.fn.easytabs.defaults, options),
       $tabs = $container.find(opts.tabs);
       $panels = $();
 
@@ -85,7 +87,7 @@
         panels: $panels
       });
       
-      $.fn.easyTabs.methods.setDefaultTab.apply($container);
+      $.fn.easytabs.methods.setDefaultTab.apply($container);
           
       $($panels.filter("#" + $defaultTabLink.attr("href").substr(1))).show().addClass(opts.panelActiveClass);
 
@@ -95,7 +97,7 @@
         $container.data("easytabs").opts.cycle = false;
         $clicked = $(this);
         if($clicked.hasClass(opts.tabActiveClass)){ return false; }
-        $.fn.easyTabs.methods.selectTabWithHashChange.apply($clicked, [$container]);
+        $.fn.easytabs.methods.selectTabWithHashChange.apply($clicked, [$container]);
         e.preventDefault();
       });
     },
@@ -104,7 +106,7 @@
     },
     setDefaultTab: function(){
       var $container = this,
-          data = $.fn.easyTabs.methods.loadFromData.apply($container),
+          data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
           $selectedTab = $tabs.find("a[href='" + window.location.hash + "']").parent();
       if($selectedTab.size() == 1){
@@ -120,7 +122,7 @@
     selectTab: function($container,callback){
       var $clicked = this,
           targetId = $clicked.attr("href"),
-          data = $.fn.easyTabs.methods.loadFromData.apply($container),
+          data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
           $tabs = data.tabs,
           $panels = data.panels;
@@ -151,7 +153,7 @@
     selectTabWithHashChange: function($container){
       $clicked = this;
       url = window.location;
-      $.fn.easyTabs.methods.selectTab.apply( $clicked, [$container,function(){
+      $.fn.easytabs.methods.selectTab.apply( $clicked, [$container,function(){
         if(opts.updateHash){
           $container.data("easytabs").skipHashUpdateOnce = true;
           window.location = url.toString().replace((url.pathname + url.hash), (url.pathname + $clicked.attr("href")));
@@ -160,7 +162,7 @@
     },
     selectTabFromHashChange: function(){
       var $container = this,
-          data = $.fn.easyTabs.methods.loadFromData.apply($container),
+          data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
           skipHashUpdateOnce = data.skipHashUpdateOnce,
           $tabs = data.tabs,
@@ -170,9 +172,9 @@
         var hash = window.location.hash,
             $tab = $tabs.find("a[href='" + hash + "']");
         if( $tab.size() > 0 ){
-          $.fn.easyTabs.methods.selectTab.apply( $tab, [$container] );
+          $.fn.easytabs.methods.selectTab.apply( $tab, [$container] );
         } else if ( hash == '' && ! $defaultTab.hasClass(opts.activeTabClass) ) {
-          $.fn.easyTabs.methods.selectTab.apply( $defaultTabLink, [$container] );
+          $.fn.easytabs.methods.selectTab.apply( $defaultTabLink, [$container] );
         }
       }else{
         $container.data("easytabs").skipHashUpdateOnce = false;
@@ -180,29 +182,29 @@
     },
     cycleTabs: function(tabNumber){
       var $container = this,
-          data = $.fn.easyTabs.methods.loadFromData.apply($container),
+          data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
           $tabs = data.tabs;
       if(opts.cycle){
         tabNumber = tabNumber % $tabs.size();
         $tab = $($tabs[tabNumber]).children("a").first();
-        $.fn.easyTabs.methods.selectTab.apply($tab, [$container, function(){
-          setTimeout(function(){ $.fn.easyTabs.methods.cycleTabs.apply($container,[tabNumber + 1]);}, opts.cycle);
+        $.fn.easytabs.methods.selectTab.apply($tab, [$container, function(){
+          setTimeout(function(){ $.fn.easytabs.methods.cycleTabs.apply($container,[tabNumber + 1]);}, opts.cycle);
         }]);
       }
     }
   }
   
-  $.fn.easyTabs.publicMethods = {
+  $.fn.easytabs.publicMethods = {
     select: function(tabSelector){
       var $container = this,
-          data = $.fn.easyTabs.methods.loadFromData.apply($container),
+          data = $.fn.easytabs.methods.loadFromData.apply($container),
           $tabs = data.tabs;
       var $tab = $tabs.filter(tabSelector);
       if ( $tab.size() == 0 ) {
         $.error('Tab \'' + tabSelector + '\' does not exist in tab set');
       }
-      $.fn.easyTabs.methods.selectTabWithHashChange.apply($tab.children("a").first(), [$container]);
+      $.fn.easytabs.methods.selectTabWithHashChange.apply($tab.children("a").first(), [$container]);
     }
   }
 })(jQuery);
