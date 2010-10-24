@@ -14,6 +14,8 @@ VIEW UPDATES AND NEW FEATURES FOR V1.1.2 AT: http://www.alfajango.com/blog/jquer
 
 DOWNLOAD JQUERY EASYTABS AT: http://plugins.jquery.com/project/easytabs
 
+FORK AND VIEW SOURCECODE AT: http://github.com/JangoSteve/jQuery-EasyTabs
+
 -------------------------------------------------------------------------------------------
 
 JQuery EasyTabs Plugin
@@ -31,7 +33,10 @@ View EasyTabs Plugin on jQuery.com: http://plugins.jquery.com/project/easytabs
 ## What EasyTabs Does:
 
 - Creates tabs from an unordered list, which link to divs on the page
-- Allows complete customization of appearance, layout, and style in  your CSS
+- Allows complete customization of appearance, layout, and style via CSS
+- Supports forward- and back-button in browsers
+- Tabs are bookmarkable and SEO-friendly
+- Tabs can be cycled at a specified interval
 
 ## What EasyTabs Does NOT Do:
 
