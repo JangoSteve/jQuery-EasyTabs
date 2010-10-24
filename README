@@ -20,6 +20,16 @@ FORK AND VIEW SOURCECODE AT: http://github.com/JangoSteve/jQuery-EasyTabs
 
 -------------------------------------------------------------------------------------------
 
+CHANGELOG
+
+v2.0
+-changed .easyTabs() to .easytabs() with no capitalization
+-added "easytabs:before" and "easytabs:after" events to easytabs container elements
+-added public method "select", called with $(el).easytabs('select', '#tab-two'); to change tabs directly
+-resolved conflicts with using hashchange to enable back button with multiple easytab containers on one page
+
+-------------------------------------------------------------------------------------------
+
 JQuery EasyTabs Plugin
 
 

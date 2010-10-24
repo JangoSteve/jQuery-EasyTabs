@@ -128,12 +128,12 @@
           $panels = data.panels;
         
       if( ! $clicked.hasClass(opts.tabActiveClass) ){
-        $container.trigger("easytabs:beforeChange");
+        $container.trigger("easytabs:before");
         if(opts.animate){
           $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass).fadeOut(opts.animationSpeed, function(){
             $panels.filter(targetId).fadeIn(opts.animationSpeed, function(){
               $(this).addClass(opts.panelActiveClass);
-              $container.trigger("easytabs:afterChange"); 
+              $container.trigger("easytabs:after"); 
             });
           });
         }else{
@@ -144,7 +144,7 @@
         $clicked.parent().addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
         $container.data("easytabs").tabs = $tabs;
         $container.data("easytabs").panels = $panels;
-        if(!opts.animate){ $container.trigger("easytabs:afterChange"); } // this is triggered after the animation delay if opts.animate
+        if(!opts.animate){ $container.trigger("easytabs:after"); } // this is triggered after the animation delay if opts.animate
         if(typeof callback == 'function'){
           callback();
         }
