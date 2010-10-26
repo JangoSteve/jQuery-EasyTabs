@@ -33,6 +33,7 @@ v2.0
 - Bug fix: cycle interval was acting in parallel with animation speed, instead of queuing. Caused weird bug if interval set smaller than transition time.
 - Bug fix: cycling was updating hash, causing back-button build-up
 - Bug fix: animation queue was not being interrupted if tabs were clicked faster than transition was happening
+- Bug fix: URL rewriting overwriting parameters in URL
 
 -------------------------------------------------------------------------------------------
 

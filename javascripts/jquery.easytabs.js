@@ -92,7 +92,8 @@
           opts = data.opts,
           $tabs = data.tabs,
           $panels = data.panels,
-          $selectedTab = $tabs.find("a[href='" + window.location.hash + "']").parent(),
+          hash = window.location.hash.match(/^[^\?]*/)[0],
+          $selectedTab = $tabs.find("a[href='" + hash + "']").parent(),
           $defaultTab,
           $defaultTabLink;
       
@@ -113,7 +114,7 @@
     selectTab: function($container,callback){
       var $clicked = this,
           url = window.location,
-          hash = url.hash,
+          hash = url.hash.match(/^[^\?]*/)[0],
           data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
           skipUpdateToHash = data.skipUpdateToHash,
@@ -148,7 +149,9 @@
             // At this point, the previous panel is hidden, and the new one will be selected
             $container.trigger("easytabs:midTransition");
             if ( opts.updateHash && ! skipUpdateToHash ) {
-              window.location = url.toString().replace((url.pathname + url.hash), (url.pathname + $clicked.attr("href")));
+              //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
+              // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
+              window.location.hash = $clicked.attr("href");
             } else {
               $container.data("easytabs").skipUpdateToHash = false;
             }
@@ -173,7 +176,7 @@
           $tabs = data.tabs,
           $defaultTab = data.defaultTab,
           $defaultTabLink = data.defaultTabLink,
-          hash = window.location.hash,
+          hash = window.location.hash.match(/^[^\?]*/)[0],
           $tab = $tabs.find("a[href='" + hash + "']");
       if ( opts.updateHash ) {
         if( $tab.size() > 0 ){
