@@ -36,13 +36,17 @@
 		</style>
 		<script type="text/javascript"> 
 		  $(document).ready(function(){ 
-		    $('#tab-container').easytabs({
-		      cycle: 3000
-		    }); 
+		    $('#tab-container').easytabs(); 
+		    
+		    $('#select-second-tab').click(function(){
+		      // Selects the 2nd tab
+		      $('#tab-container').easytabs('select', 'li:nth-child(2)')
+		    });
 		    
 		    $('#tab-container-2').easytabs({
   			  animationSpeed: 2000,
-  			  defaultTab: "li#the-second-tab"
+  			  defaultTab: "li#default",
+  			  cycle: 3000
   		  });
   		
   		  $('#tab-container-3').easytabs({
@@ -64,6 +68,9 @@
 	        <div id="tab-1-div">
 	          <h2>Heading 1</h2>
 	          <p>This is the content of the first tab.</p>
+	          <p>
+	            <button id="select-second-tab">Select second tab</button>
+	          </p>
 	        </div>
 	        <div id="that-other-tab" class="tab-container">
 	          <h2>Heading 2</h2>
@@ -80,23 +87,23 @@
 	    
 	    <div id="tab-container-2">
 	      <div class="panel-container">
-	        <div id="tab-1-div" class="tab-container-2">
+	        <div id="2-tab-1-div" class="tab-container-2">
 	          <h2>Heading 1</h2>
 	          <p>This is the content of the first tab.</p>
 	        </div>
-	        <div id="that-other-tab" class="tab-container-2">
+	        <div id="2-that-other-tab" class="tab-container-2">
 	          	<h2>Configuration</h2>
 	    		<p>This example displays the second tab by default. Also, the tab-switching animation is slowed down to 4 seconds (2sec fade-out and 2sec fade-in).</p>
 	        </div>
-	        <div id="lastly" class="tab-container-2">
+	        <div id="2-lastly" class="tab-container-2">
 	          <h2>Heading 3</h2>
 	          <p>More stuff from the last tab.</p>
 	        </div>
 	      </div>
 	      <ul>
-	        <li><a href="#tab-1-div">Tab 1</a></li>
-	        <li id="the-second-tab"><a href="#that-other-tab">The Second Tab</a></li>
-	        <li><a href="#lastly">Tab C</a></li>
+	        <li><a href="#2-tab-1-div">Tab 1</a></li>
+	        <li id="default"><a href="#2-that-other-tab">The Second Tab</a></li>
+	        <li><a href="#2-lastly">Tab C</a></li>
 	      </ul>
 	    </div>
 	    
@@ -104,20 +111,20 @@
 	    
 	    <div id="tab-container-3">
 	      <ul>
-	        <li><a href="#tab-1-div">Tab 1</a></li>
-	        <li><a href="#that-other-tab">The Second Tab</a></li>
-	        <li><a href="#lastly">Tab C</a></li>
+	        <li><a href="#3-tab-1-div">Tab 1</a></li>
+	        <li><a href="#3-that-other-tab">The Second Tab</a></li>
+	        <li><a href="#3-lastly">Tab C</a></li>
 	      </ul>
 	      <div class="panel-container">
-	        <div id="tab-1-div" class="tab-container-3">
+	        <div id="3-tab-1-div" class="tab-container-3">
 	          	<h2>Configurations</h2>
 	    		<p>This example has the animation disabled, so tab-switching is instantaneous. It also sets the active class names to custom names for more control over CSS stylization.</p>
 	        </div>
-	        <div id="that-other-tab" class="tab-container-3">
+	        <div id="3-that-other-tab" class="tab-container-3">
 	          <h2>Heading 2</h2>
 	          <p>Stuff from the second tab.</p>
 	        </div>
-	        <div id="lastly" class="tab-container-3">
+	        <div id="3-lastly" class="tab-container-3">
 	          <h2>Heading 3</h2>
 	          <p>More stuff from the last tab.</p>
 	        </div>
