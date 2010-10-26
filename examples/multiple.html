@@ -36,7 +36,9 @@
 		</style>
 		<script type="text/javascript"> 
 		  $(document).ready(function(){ 
-		    $('#tab-container').easytabs(); 
+		    $('#tab-container').easytabs({
+		      updateHash: false
+		    }); 
 		    
 		    $('#select-second-tab').click(function(){
 		      // Selects the 2nd tab
@@ -44,7 +46,7 @@
 		    });
 		    
 		    $('#tab-container-2').easytabs({
-  			  animationSpeed: 2000,
+  			  animationSpeed: 1000,
   			  defaultTab: "li#default",
   			  cycle: 3000
   		  });
@@ -93,7 +95,7 @@
 	        </div>
 	        <div id="2-that-other-tab" class="tab-container-2">
 	          	<h2>Configuration</h2>
-	    		<p>This example displays the second tab by default. Also, the tab-switching animation is slowed down to 4 seconds (2sec fade-out and 2sec fade-in).</p>
+	    		<p>This example displays the second tab by default. Also, the tab-switching animation is slowed down to 2 seconds (1sec fade-out and 1sec fade-in).</p>
 	        </div>
 	        <div id="2-lastly" class="tab-container-2">
 	          <h2>Heading 3</h2>

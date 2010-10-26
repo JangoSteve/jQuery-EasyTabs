@@ -68,7 +68,7 @@
       
       $container.data("easytabs", {
         opts: opts,
-        skipHashUpdateOnce: false,
+        skipUpdateToHash: false,
         tabs: $tabs,
         panels: $panels
       });
@@ -77,6 +77,7 @@
       
       $tabs.children("a").bind("click.easytabs", function(e) {
         $container.data("easytabs").opts.cycle = false;
+        $container.data("easytabs").skipUpdateToHash = false;
         $clicked = $(this);
         $.fn.easytabs.methods.selectTab.apply($clicked, [$container]);
         e.preventDefault();
@@ -112,12 +113,14 @@
     selectTab: function($container,callback){
       var $clicked = this,
           url = window.location,
+          hash = url.hash,
           data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
-          skipHashUpdateOnce = data.skipHashUpdateOnce,
+          skipUpdateToHash = data.skipUpdateToHash,
           $tabs = data.tabs,
           $panels = data.panels,
           $targetPanel = $panels.filter( $clicked.attr("href") ),
+          $defaultTabLink = data.defaultTabLink,
           transitions = ( opts.animate ) ? {
             show: "fadeIn",
             hide: "fadeOut",
@@ -144,16 +147,16 @@
           [transitions.hide](transitions.speed, function(){
             // At this point, the previous panel is hidden, and the new one will be selected
             $container.trigger("easytabs:midTransition");
-            if ( opts.updateHash && ! skipHashUpdateOnce ) {
-              $container.data("easytabs").skipHashUpdateOnce = true;
+            if ( opts.updateHash && ! skipUpdateToHash ) {
               window.location = url.toString().replace((url.pathname + url.hash), (url.pathname + $clicked.attr("href")));
+            } else {
+              $container.data("easytabs").skipUpdateToHash = false;
             }
             $targetPanel
               [transitions.show](transitions.speed, function(){
                 // Save the new tabs and panels to the container data (with new active tab/panel)
                 $container.data("easytabs").tabs = $tabs;
                 $container.data("easytabs").panels = $panels;
-                $container.data("easytabs").skipHashUpdateOnce = false;
                 $container.trigger("easytabs:after"); 
                 // callback only gets called if selectTab actually does something, since it's inside the if block
                 if(typeof callback == 'function'){
@@ -167,20 +170,18 @@
       var $container = this,
           data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
-          skipHashUpdateOnce = data.skipHashUpdateOnce,
           $tabs = data.tabs,
           $defaultTab = data.defaultTab,
           $defaultTabLink = data.defaultTabLink,
           hash = window.location.hash,
           $tab = $tabs.find("a[href='" + hash + "']");
-      if ( ! skipHashUpdateOnce ){
+      if ( opts.updateHash ) {
         if( $tab.size() > 0 ){
           $.fn.easytabs.methods.selectTab.apply( $tab, [$container] );
-        } else if ( hash == '' && ! $defaultTab.hasClass(opts.activeTabClass) ) {
+        } else if ( hash == '' && ! $defaultTab.hasClass(opts.tabActiveClass) && ! opts.cycle ) {
+          $container.data("easytabs").skipUpdateToHash = true;
           $.fn.easytabs.methods.selectTab.apply( $defaultTabLink, [$container] );
         }
-      }else{
-        $container.data("easytabs").skipHashUpdateOnce = false;
       }
     },
     cycleTabs: function(tabNumber){
@@ -191,7 +192,7 @@
       if(opts.cycle){
         tabNumber = tabNumber % $tabs.size();
         $tab = $($tabs[tabNumber]).children("a").first();
-        $container.data("easytabs").skipHashUpdateOnce = true;
+        $container.data("easytabs").skipUpdateToHash = true;
         $.fn.easytabs.methods.selectTab.apply($tab, [$container, function(){
           setTimeout(function(){ $.fn.easytabs.methods.cycleTabs.apply($container,[tabNumber + 1]);}, opts.cycle);
         }]);
@@ -207,7 +208,7 @@
         });
       }else if($.address && typeof $.address.change == 'function'){ // back-button with jquery.address plugin http://www.asual.com/jquery/address/docs/
         $.address.change( function(){
-          methods.selectTabFromHashChange.apply($container);
+          $.fn.easytabs.methods.selectTabFromHashChange.apply($container);
         });
       }
     },
