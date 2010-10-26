@@ -23,10 +23,13 @@ FORK AND VIEW SOURCECODE AT: http://github.com/JangoSteve/jQuery-EasyTabs
 CHANGELOG
 
 v2.0
--changed .easyTabs() to .easytabs() with no capitalization
--added "easytabs:before" and "easytabs:after" events to easytabs container elements
--added public method "select", called with $(el).easytabs('select', '#tab-two'); to change tabs directly
--resolved conflicts with using hashchange to enable back button with multiple easytab containers on one page
+- Changed .easyTabs() to .easytabs() with no capitalization
+- Added "easytabs:before" and "easytabs:after" events to easytabs container elements
+- Added "easytabs:midTransition" event, which occurs after the first panel is hidden and before the second one is shown
+- Added public method "select", called with $(el).easytabs('select', '#tab-two'); to change tabs directly
+- Resolved conflicts with using hashchange to enable back button with multiple easytab containers on one page
+- Bug fix to exclude links from tab-set which don't have a matching target panel
+- Namespaced click binding for tabs. now binds to click.easytabs, so a simple $(el).unbind('easytabs') will undo all bindings.
 
 -------------------------------------------------------------------------------------------
 

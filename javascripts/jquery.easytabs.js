@@ -37,7 +37,7 @@
           });
         }
         
-        if (opts.cycle) {
+        if ($container.data("easytabs").opts.cycle) {
           tabNumber = $tabs.index($defaultTab);
           setTimeout( function(){ $.fn.easytabs.methods.cycleTabs.apply($container, [tabNumber + 1]); }, opts.cycle);
         }
@@ -64,10 +64,10 @@
   
   $.fn.easytabs.methods = {
     init: function(options){
-      var $container = this;
-      opts = $.extend({}, $.fn.easytabs.defaults, options),
-      $tabs = $container.find(opts.tabs);
-      $panels = $();
+      var $container = this,
+          opts = $.extend({}, $.fn.easytabs.defaults, options),
+          $tabs = $container.find(opts.tabs),
+          $panels = $();
 
       $tabs.each(function(){
         targetId = $(this).children("a").attr("href").substr(1);
@@ -97,7 +97,7 @@
         $container.data("easytabs").opts.cycle = false;
         $clicked = $(this);
         if($clicked.hasClass(opts.tabActiveClass)){ return false; }
-        $.fn.easytabs.methods.selectTabWithHashChange.apply($clicked, [$container]);
+        $.fn.easytabs.methods.selectTab.apply($clicked, [$container]);
         e.preventDefault();
       });
     },
@@ -108,6 +108,7 @@
       var $container = this,
           data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
+          $tabs = data.tabs,
           $selectedTab = $tabs.find("a[href='" + window.location.hash + "']").parent();
       if($selectedTab.size() == 1){
         $defaultTab = $selectedTab;
@@ -122,43 +123,50 @@
     selectTab: function($container,callback){
       var $clicked = this,
           targetId = $clicked.attr("href"),
+          url = window.location,
           data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
+          skipHashUpdateOnce = opts.skipHashUpdateOnce,
           $tabs = data.tabs,
-          $panels = data.panels;
+          $panels = data.panels,
+          transitions = ( opts.animate ) ? {
+            show: "fadeIn",
+            hide: "fadeOut",
+            speed: opts.animationSpeed
+          } :
+          {
+            show: "show",
+            hide: "hide",
+            speed: 0
+          };
         
       if( ! $clicked.hasClass(opts.tabActiveClass) ){
         $container.trigger("easytabs:before");
-        if(opts.animate){
-          $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass).fadeOut(opts.animationSpeed, function(){
-            $panels.filter(targetId).fadeIn(opts.animationSpeed, function(){
-              $(this).addClass(opts.panelActiveClass);
-              $container.trigger("easytabs:after"); 
-            });
-          });
-        }else{
-          $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass).hide();
-          $panels.filter(targetId).addClass(opts.panelActiveClass).show();
-        }
+        
+        // Change the active tab *first* to provide immediate feedback when the user clicks
         $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
         $clicked.parent().addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
+        
+        $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass)[transitions.hide](transitions.speed, function(){
+          // At this point, the previous panel is hidden, and the new one will be selected
+          $container.trigger("easytabs:midTransition");
+          if ( opts.updateHash && ! skipHashUpdateOnce ) {
+            window.location = url.toString().replace((url.pathname + url.hash), (url.pathname + $clicked.attr("href")));
+          }
+          $panels.filter(targetId)[transitions.show](transitions.speed, function(){
+            $(this).addClass(opts.panelActiveClass);
+            $container.trigger("easytabs:after"); 
+          });
+        });
+        
+        // Save the new tabs and panels to the container data (with new active tab/panel)
         $container.data("easytabs").tabs = $tabs;
         $container.data("easytabs").panels = $panels;
-        if(!opts.animate){ $container.trigger("easytabs:after"); } // this is triggered after the animation delay if opts.animate
+        // callback only gets called if selectTab actually does something, since it's inside the if block
         if(typeof callback == 'function'){
           callback();
         }
       }
-    },
-    selectTabWithHashChange: function($container){
-      $clicked = this;
-      url = window.location;
-      $.fn.easytabs.methods.selectTab.apply( $clicked, [$container,function(){
-        if(opts.updateHash){
-          $container.data("easytabs").skipHashUpdateOnce = true;
-          window.location = url.toString().replace((url.pathname + url.hash), (url.pathname + $clicked.attr("href")));
-        }
-      }] );
     },
     selectTabFromHashChange: function(){
       var $container = this,
@@ -204,7 +212,7 @@
       if ( $tab.size() == 0 ) {
         $.error('Tab \'' + tabSelector + '\' does not exist in tab set');
       }
-      $.fn.easytabs.methods.selectTabWithHashChange.apply($tab.children("a").first(), [$container]);
+      $.fn.easytabs.methods.selectTab.apply($tab.children("a").first(), [$container]);
     }
   }
 })(jQuery);
