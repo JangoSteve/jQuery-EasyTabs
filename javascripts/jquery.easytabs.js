@@ -234,11 +234,17 @@
       var $container = this,
           data = $.fn.easytabs.methods.loadFromData.apply($container),
           $tabs = data.tabs,
-          $tab = $tabs.filter(tabSelector);
-      if ( $tab.size() == 0 ) {
-        $.error('Tab \'' + tabSelector + '\' does not exist in tab set');
+          $tab;
+      if ( ($tab = $tabs.filter(tabSelector)).size() == 0 ) {                       // Find tab container that matches selector (like 'li#tab-one' which contains tab link)
+        if ( ($tab = $tabs.find("a[href='" + tabSelector + "']")).size() == 0 ) {   // Find direct tab link that matches href (like 'a[href="#panel-1"]')
+          if ( ($tab = $tabs.find("a" + tabSelector)).size() == 0 ) {               // Find direct tab link that matches selector (like 'a#tab-1')
+            $.error('Tab \'' + tabSelector + '\' does not exist in tab set');
+          }
+        }
+      } else {
+        $tab = $tab.children("a").first();                                          // Select the child tab link, since the first option finds the tab container (like <li>)
       }
-      $.fn.easytabs.methods.selectTab.apply($tab.children("a").first(), [$container]);
+      $.fn.easytabs.methods.selectTab.apply($tab, [$container]);
     }
   }
 })(jQuery);

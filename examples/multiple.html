@@ -44,6 +44,10 @@
 		      // Selects the 2nd tab
 		      $('#tab-container').easytabs('select', 'li:nth-child(2)')
 		    });
+		    $('#select-third-tab').click(function(){
+		      // Selects the 2nd tab
+		      $('#tab-container').easytabs('select', '#lastly')
+		    });
 		    
 		    $('#tab-container-2').easytabs({
   			  animationSpeed: 1000,
@@ -72,6 +76,9 @@
 	          <p>This is the content of the first tab.</p>
 	          <p>
 	            <button id="select-second-tab">Select second tab</button>
+	          </p>
+	          <p>
+	            <button id="select-third-tab">Select third panel by ID</button>
 	          </p>
 	        </div>
 	        <div id="that-other-tab" class="tab-container">

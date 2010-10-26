@@ -27,6 +27,7 @@ v2.0
 - Added "easytabs:before" and "easytabs:after" events to easytabs container elements
 - Added "easytabs:midTransition" event, which occurs after the first panel is hidden and before the second one is shown
 - Added public method "select", called with $(el).easytabs('select', '#tab-two'); to change tabs directly
+  - Public "select" method can now be passed with tab-selector, tab-link-selector, or tab-link-href
 - Resolved conflicts with using hashchange to enable back button with multiple easytab containers on one page
 - Bug fix: exclude links from tab-set which don't have a matching target panel
 - Namespaced click binding for tabs. now binds to click.easytabs, so a simple $(el).unbind('easytabs') will undo all bindings.
