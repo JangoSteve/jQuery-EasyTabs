@@ -8,15 +8,15 @@ Dual licensed under the MIT and GPL licenses:
 
 -------------------------------------------------------------------------------------------
 
-[VIEW FULL DOCUMENTATION AND DEMOS] (http://www.alfajango.com/blog/jquery-easytabs-plugin/)
+[Full Documentation and Demos](http://www.alfajango.com/blog/jquery-easytabs-plugin/)
 
-[VIEW UPDATES AND NEW FEATURES FOR V1.1.2] (http://www.alfajango.com/blog/jquery-easytabs-plugin-now-more-flexible-and-usable)
+[Updates and new features for v1.1.2](http://www.alfajango.com/blog/jquery-easytabs-plugin-now-more-flexible-and-usable)
 
-[VIEW UPDATES AND NEW FEATURES FOR V2.0] (http://www.alfajango.com/blog/jquery-easytabs-plugin-v2)
+[Updates and new features for v2.0](http://www.alfajango.com/blog/jquery-easytabs-plugin-v2)
 
-[DOWNLOAD JQUERY EASYTABS] (http://plugins.jquery.com/project/easytabs)
+[Download jQuery EasyTabs](http://plugins.jquery.com/project/easytabs)
 
-[FORK AND VIEW SOURCECODE] (http://github.com/JangoSteve/jQuery-EasyTabs)
+[Fork and view source code](http://github.com/JangoSteve/jQuery-EasyTabs)
 
 -------------------------------------------------------------------------------------------
 
@@ -73,7 +73,7 @@ Unlike JQuery UI tabs, the HTML markup for your tabs and content can be arranged
 
 ### The Javascript
 
-To enable back- and forward-button support for the users' browsers, be sure to include either the [jQuery HashChange plugin] (http://benalman.com/projects/jquery-hashchange-plugin/) (recommended) or the [Address plugin] (http://www.asual.com/jquery/address/docs/) before including the EasyTabs plugin. There is no other configuration required, it will just work!
+To enable back- and forward-button support for the users' browsers, be sure to include either the [jQuery HashChange plugin](http://benalman.com/projects/jquery-hashchange-plugin/) (recommended) or the [Address plugin](http://www.asual.com/jquery/address/docs/) before including the EasyTabs plugin. There is no other configuration required, it will just work!
 
     <script src="/javascripts/jquery.js" type="text/javascript"></script> 
     <script src="/javascripts/jquery.hashchange.js" type="text/javascript"></script> 
@@ -104,16 +104,18 @@ Other than that, go nuts. The order of the elements does NOT matter. Your `<ul>`
 
 -------------------------------------------------------------------------------------------
 
-For stylization, configuration options, and live demos, see the [EasyTabs homepage] (http://www.alfajango.com/blog/jquery-easytabs-plugin/)
+For stylization, configuration options, and live demos, see the [EasyTabs homepage](http://www.alfajango.com/blog/jquery-easytabs-plugin/)
 
 -------------------------------------------------------------------------------------------
 
-CHANGELOG
+## CHANGELOG
 
-v2.0.1
+### v2.0.1
+
 * Fixed IE bug and made more robust to work with links with both parameters and hash specified
 
-v2.0
+### v2.0
+
 * Changed .easyTabs() to .easytabs() with no capitalization
 * Added "easytabs:before" and "easytabs:after" events to easytabs container elements
 * Added "easytabs:midTransition" event, which occurs after the first panel is hidden and before the second one is shown
@@ -126,5 +128,3 @@ v2.0
 * Bug fix: cycling was updating hash, causing back-button build-up
 * Bug fix: animation queue was not being interrupted if tabs were clicked faster than transition was happening
 * Bug fix: URL rewriting overwriting parameters in URL
-
--------------------------------------------------------------------------------------------
