@@ -56,7 +56,7 @@
           $defaultTabLink;
 
       $tabs.each(function(){
-        targetId = $(this).children("a").attr("href").substr(1);
+        targetId = $(this).children("a").attr("href").match(/#([^\?]+)/)[0].substr(1);
         $matchingPanel = $container.find("div[id=" + targetId + "]");
         if ( $matchingPanel.size() > 0 ) {
           $panels = $panels.add($matchingPanel.hide());
@@ -108,7 +108,7 @@
       $container.data("easytabs").defaultTab = $defaultTab;
       $container.data("easytabs").defaultTabLink = $defaultTabLink;
       
-      $panels.filter("#" + $defaultTabLink.attr("href").substr(1)).show().addClass(opts.panelActiveClass);
+      $panels.filter("#" + $defaultTabLink.attr("href").match(/#([^\?]+)/)[0].substr(1)).show().addClass(opts.panelActiveClass);
       $defaultTab.addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
     },
     selectTab: function($container,callback){
@@ -120,7 +120,7 @@
           skipUpdateToHash = data.skipUpdateToHash,
           $tabs = data.tabs,
           $panels = data.panels,
-          $targetPanel = $panels.filter( $clicked.attr("href") ),
+          $targetPanel = $panels.filter( $clicked.attr("href").match(/#([^\?]+)/)[0] ),
           $defaultTabLink = data.defaultTabLink,
           transitions = ( opts.animate ) ? {
             show: "fadeIn",
