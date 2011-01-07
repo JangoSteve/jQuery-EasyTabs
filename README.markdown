@@ -1,10 +1,7 @@
 jQuery EasyTabs plugin 2.0.1
-
 Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
 
-Dual licensed under the MIT and GPL licenses:
-  http://www.opensource.org/licenses/mit-license.php
-  http://www.gnu.org/licenses/gpl.html
+Dual licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) and [GPL](http://www.gnu.org/licenses/gpl.html) licenses.
 
 -------------------------------------------------------------------------------------------
 
@@ -102,9 +99,10 @@ Other than that, go nuts. The order of the elements does NOT matter. Your `<ul>`
     div#tab-container div#tab-1
     div#tab-container div#second-tab
 
+
 -------------------------------------------------------------------------------------------
 
-For stylization, configuration options, and live demos, see the [EasyTabs homepage](http://www.alfajango.com/blog/jquery-easytabs-plugin/)
+For stylization, configuration options, and live demos, see the [EasyTabs homepage](http://www.alfajango.com/blog/jquery-easytabs-plugin/).
 
 -------------------------------------------------------------------------------------------
 
