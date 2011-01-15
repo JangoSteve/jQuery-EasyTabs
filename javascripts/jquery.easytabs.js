@@ -84,7 +84,7 @@
       });
     },
     loadFromData: function(){
-      return data = this.data("easytabs");
+      return this.data("easytabs");
     },
     setDefaultTab: function(){
       var $container = this,
