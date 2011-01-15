@@ -1,4 +1,4 @@
-jQuery EasyTabs plugin 2.0.1
+jQuery EasyTabs plugin 2.0.2
 Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
 
 Dual licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) and [GPL](http://www.gnu.org/licenses/gpl.html) licenses.
@@ -107,6 +107,10 @@ For stylization, configuration options, and live demos, see the [EasyTabs homepa
 -------------------------------------------------------------------------------------------
 
 ## CHANGELOG
+
+### v2.0.2
+
+* Fixed bug when panel div has id="data"
 
 ### v2.0.1
 
