@@ -43,17 +43,27 @@
     animationSpeed: "normal", 
     tabs: "> ul > li", 
     updateHash: true, 
-    cycle: false
+    cycle: false,
+    uiTabs: false
   }
   
   $.fn.easytabs.methods = {
     init: function(options){
       var $container = this,
-          opts = $.extend({}, $.fn.easytabs.defaults, options),
-          $tabs = $container.find(opts.tabs),
+          opts,
+          $tabs,
           $panels = $(),
           $defaultTab,
           $defaultTabLink;
+
+      if ( options && options['uiTabs'] ) {
+        $container.addClass('ui-tabs');
+        $.extend($.fn.easytabs.defaults, {
+          tabActiveClass: 'ui-tabs-selected'
+        });
+      }
+      opts = $.extend({}, $.fn.easytabs.defaults, options);
+      $tabs = $container.find(opts.tabs);
 
       $tabs.each(function(){
         targetId = $(this).children("a").attr("href").match(/#([^\?]+)/)[0].substr(1);
