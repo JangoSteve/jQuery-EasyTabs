@@ -10,6 +10,13 @@
  * Date: Sat Jan 15 02:40:00 2011 -0500
  */
 (function($) {
+
+  // Triggers an event on an element and returns the event result
+	function fire(obj, name, data) {
+		var event = $.Event(name);
+		obj.trigger(event, data);
+		return event.result !== false;
+	}
   
   $.fn.easyTabs = function(){ $.error("easyTabs() is no longer used. Now use easytabs() -- no capitalization."); }
   
@@ -145,38 +152,39 @@
       
       if( ! $clicked.hasClass(opts.tabActiveClass) || ! $targetPanel.hasClass(opts.panelActiveClass) ){
         $panels.stop(true,true);
-        $container.trigger("easytabs:before");
+        if( fire($container,"easytabs:before") ){
         
-        // Change the active tab *first* to provide immediate feedback when the user clicks
-        $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
-        $clicked.parent().addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
-        
-        $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass);
-        $targetPanel.addClass(opts.panelActiveClass);
-        
-        $panels.filter(":visible")
-          [transitions.hide](transitions.speed, function(){
-            // At this point, the previous panel is hidden, and the new one will be selected
-            $container.trigger("easytabs:midTransition");
-            if ( opts.updateHash && ! skipUpdateToHash ) {
-              //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
-              // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
-              window.location.hash = $clicked.attr("href");
-            } else {
-              $container.data("easytabs").skipUpdateToHash = false;
-            }
-            $targetPanel
-              [transitions.show](transitions.speed, function(){
-                // Save the new tabs and panels to the container data (with new active tab/panel)
-                $container.data("easytabs").tabs = $tabs;
-                $container.data("easytabs").panels = $panels;
-                $container.trigger("easytabs:after"); 
-                // callback only gets called if selectTab actually does something, since it's inside the if block
-                if(typeof callback == 'function'){
-                  callback();
-                }
-            });
-        });
+          // Change the active tab *first* to provide immediate feedback when the user clicks
+          $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
+          $clicked.parent().addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
+          
+          $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass);
+          $targetPanel.addClass(opts.panelActiveClass);
+          
+          $panels.filter(":visible")
+            [transitions.hide](transitions.speed, function(){
+              // At this point, the previous panel is hidden, and the new one will be selected
+              $container.trigger("easytabs:midTransition");
+              if ( opts.updateHash && ! skipUpdateToHash ) {
+                //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
+                // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
+                window.location.hash = $clicked.attr("href");
+              } else {
+                $container.data("easytabs").skipUpdateToHash = false;
+              }
+              $targetPanel
+                [transitions.show](transitions.speed, function(){
+                  // Save the new tabs and panels to the container data (with new active tab/panel)
+                  $container.data("easytabs").tabs = $tabs;
+                  $container.data("easytabs").panels = $panels;
+                  $container.trigger("easytabs:after"); 
+                  // callback only gets called if selectTab actually does something, since it's inside the if block
+                  if(typeof callback == 'function'){
+                    callback();
+                  }
+              });
+          });
+        }
       }
     },
     selectTabFromHashChange: function(){
