@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Sat Mar 21 02:30:00 2011 -0500
+ * Date: Sat Mar 21 03:00:00 2011 -0500
  */
 (function($) {
 
@@ -195,6 +195,15 @@
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           var $visiblePanel = $panels.filter(":visible"),
               showPanel = function(){
+                // At this point, the previous panel is hidden, and the new one will be selected
+                $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
+                if ( opts.updateHash && ! skipUpdateToHash ) {
+                  //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
+                  // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
+                  window.location.hash = $clicked.attr("href");
+                } else {
+                  $container.data("easytabs").skipUpdateToHash = false;
+                }
                 $targetPanel
                   [transitions.show](transitions.speed, function(){
                     // Save the new tabs and panels to the container data (with new active tab/panel)
@@ -215,16 +224,6 @@
           
           $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass);
           $targetPanel.addClass(opts.panelActiveClass);
-
-           // At this point, the previous panel is hidden, and the new one will be selected
-          $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
-          if ( opts.updateHash && ! skipUpdateToHash ) {
-            //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
-            // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
-            window.location.hash = $clicked.attr("href");
-          } else {
-            $container.data("easytabs").skipUpdateToHash = false;
-          }
 
           if( $visiblePanel.size() > 0 ) {
             $visiblePanel
