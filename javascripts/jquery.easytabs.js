@@ -165,7 +165,7 @@
       
       if( opts.collapsible && ! skipUpdateToHash && ($clicked.hasClass(opts.tabActiveClass) || $clicked.hasClass(opts.collapsedClass)) ) {
         $panels.stop(true,true);
-        if( fire($container,"easytabs:before") ){
+        if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
           if( $clicked.hasClass(opts.collapsedClass) ){
             $clicked.parent()
@@ -177,7 +177,7 @@
             $targetPanel
               .addClass(opts.panelActiveClass)
               [transitions.uncollapse](transitions.speed, function(){
-                $container.trigger('easytabs:midTransition');
+                $container.trigger('easytabs:midTransition', [$clicked, $targetPanel, data]);
                 if(typeof callback == 'function') callback();
               });
           } else {
@@ -185,14 +185,14 @@
             $targetPanel
               .removeClass(opts.panelActiveClass)
               [transitions.collapse](transitions.speed, function(){
-                $container.trigger("easytabs:midTransition");
+                $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
                 if(typeof callback == 'function') callback();
               });
           }
         }
       } else if( ! $clicked.hasClass(opts.tabActiveClass) || ! $targetPanel.hasClass(opts.panelActiveClass) ){
         $panels.stop(true,true);
-        if( fire($container,"easytabs:before") ){
+        if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           var $visiblePanel = $panels.filter(":visible"),
               showPanel = function(){
                 $targetPanel
@@ -200,7 +200,7 @@
                     // Save the new tabs and panels to the container data (with new active tab/panel)
                     $container.data("easytabs").tabs = $tabs;
                     $container.data("easytabs").panels = $panels;
-                    $container.trigger("easytabs:after"); 
+                    $container.trigger("easytabs:after", [$clicked, $targetPanel, data]); 
                     // callback only gets called if selectTab actually does something, since it's inside the if block
                     if(typeof callback == 'function'){
                       callback();
@@ -217,7 +217,7 @@
           $targetPanel.addClass(opts.panelActiveClass);
 
            // At this point, the previous panel is hidden, and the new one will be selected
-          $container.trigger("easytabs:midTransition");
+          $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
           if ( opts.updateHash && ! skipUpdateToHash ) {
             //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
             // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
