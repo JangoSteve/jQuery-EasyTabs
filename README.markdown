@@ -1,27 +1,11 @@
-jQuery EasyTabs plugin 2.0.2
-Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
+# [JQuery EasyTabs Plugin](http://www.alfajango.com/blog/jquery-easytabs-plugin/)
 
-Dual licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) and [GPL](http://www.gnu.org/licenses/gpl.html) licenses.
+*Tabs with(out) style.*
 
--------------------------------------------------------------------------------------------
+EasyTabs creates tabs with all the functionality, no unwanted changes
+to your markup, and no hidden styling.
 
-[Full Documentation and Demos](http://www.alfajango.com/blog/jquery-easytabs-plugin/)
-
-[Updates and new features for v1.1.2](http://www.alfajango.com/blog/jquery-easytabs-plugin-now-more-flexible-and-usable)
-
-[Updates and new features for v2.0](http://www.alfajango.com/blog/jquery-easytabs-plugin-v2)
-
-[Download jQuery EasyTabs](http://plugins.jquery.com/project/easytabs)
-
-[Fork and view source code](http://github.com/JangoSteve/jQuery-EasyTabs)
-
--------------------------------------------------------------------------------------------
-
-# JQuery EasyTabs Plugin
-
-Anyone that has used the tabs functionality included in JQuery UI knows that it's a great tool that allows you to create great-looking themed tabs right out of the box. However, if you have need to customize those tabs significantly for your site, it can be a real pain.
-
-After struggling to create highly customized tabs (custom layout, tabs below the content, etc.), we finally decided to create our own plugin. Rather than styling and arranging your tabs for you, like JQuery UI tabs, this plugin handles only the functionality of the tabs, and leaves the styling to you. With EasyTabs, you control the styling via your own CSS. Let's get started!
+Unlike jQuery UI tabs, which style and arrange your tabs and panels for you, this plugin handles only the functionality of the tabs. By leaving the styling and layout up to you, it is much easier to style and arrange your tabs the way you want.
 
 ## What EasyTabs Does:
 
@@ -33,8 +17,8 @@ After struggling to create highly customized tabs (custom layout, tabs below the
 
 ## What EasyTabs Does NOT Do:
 
-* Style your tabs in any way (not through javascript or CSS)
-* Load AJAX content, or anything not already on the page
+* Style your tabs in any way (though sensible CSS defaults can be found
+  in the demos)
 
 ## Documentation
 
@@ -44,6 +28,7 @@ After struggling to create highly customized tabs (custom layout, tabs below the
 * Demos
 
 ## Installation
+
 ### The HTML
 
 Unlike JQuery UI tabs, the HTML markup for your tabs and content can be arranged however you want. At the minimum, you need a container, an unordered list of links for your tabs, and matching divs for your tabbed content.
@@ -106,27 +91,16 @@ For stylization, configuration options, and live demos, see the [EasyTabs homepa
 
 -------------------------------------------------------------------------------------------
 
-## CHANGELOG
+## Links
 
-### v2.0.2
+* [Full Documentation and Demos](http://www.alfajango.com/blog/jquery-easytabs-plugin/)
+* [Updates and new features for v1.1.2](http://www.alfajango.com/blog/jquery-easytabs-plugin-now-more-flexible-and-usable)
+* [Updates and new features for v2.0](http://www.alfajango.com/blog/jquery-easytabs-plugin-v2)
+* [Download jQuery EasyTabs](http://plugins.jquery.com/project/easytabs)
+* [Fork and view source code](http://github.com/JangoSteve/jQuery-EasyTabs)
 
-* Fixed bug when panel div has id="data"
+## Info
 
-### v2.0.1
-
-* Fixed IE bug and made more robust to work with links with both parameters and hash specified
-
-### v2.0
-
-* Changed .easyTabs() to .easytabs() with no capitalization
-* Added "easytabs:before" and "easytabs:after" events to easytabs container elements
-* Added "easytabs:midTransition" event, which occurs after the first panel is hidden and before the second one is shown
-* Added public method "select", called with $(el).easytabs('select', '#tab-two'); to change tabs directly
-  * Public "select" method can now be passed with tab-selector, tab-link-selector, or tab-link-href
-* Resolved conflicts with using hashchange to enable back button with multiple easytab containers on one page
-* Bug fix: exclude links from tab-set which don't have a matching target panel
-* Namespaced click binding for tabs. now binds to click.easytabs, so a simple $(el).unbind('easytabs') will undo all bindings.
-* Bug fix: cycle interval was acting in parallel with animation speed, instead of queuing. Caused weird bug if interval set smaller than transition time.
-* Bug fix: cycling was updating hash, causing back-button build-up
-* Bug fix: animation queue was not being interrupted if tabs were clicked faster than transition was happening
-* Bug fix: URL rewriting overwriting parameters in URL
+* Author: [Steve Schwartz](https://github.com/JangoSteve)
+* Company: [Alfa Jango, LLC](http://www.alfajango.com)
+* License: Dual licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) and [GPL](http://www.gnu.org/licenses/gpl.html) licenses.
