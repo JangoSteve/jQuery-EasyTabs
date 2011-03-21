@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 2.1.1
+ * jQuery EasyTabs plugin 2.1.2
  *
  * Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
  *
