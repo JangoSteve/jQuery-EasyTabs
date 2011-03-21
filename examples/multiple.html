@@ -5,7 +5,7 @@
 		<title>JQuery EasyTabs Demo &#8211; Multiple on Same Page &#45; Alfa Jango Blog</title> 
 		<script src="../javascripts/jquery-1.4.4.min.js" type="text/javascript"></script> 
 		<script src="../javascripts/jquery.hashchange.min.js" type="text/javascript"></script>
-		<script src="../javascripts/jquery.easytabs.js" type="text/javascript"></script>
+		<script src="../javascripts/jquery.easytabs.min.js" type="text/javascript"></script>
 
 		<style>
 			#tab-container ul { margin: 0; padding: 0; }
@@ -38,6 +38,7 @@
 		<script type="text/javascript"> 
 		  $(document).ready(function(){ 
 		    $('#tab-container').easytabs({
+          defaultTab: 'li.that-one',
           collapsible: true
 		      //updateHash: false
 		    }); 
