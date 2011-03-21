@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 2.0.2
+ * jQuery EasyTabs plugin 2.1.0
  *
  * Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
  *
@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Sat Jan 15 02:40:00 2011 -0500
+ * Date: Sat Mar 20 20:30:00 2011 -0500
  */
 (function($) {
 
@@ -51,6 +51,9 @@
     tabs: "> ul > li", 
     updateHash: true, 
     cycle: false,
+    collapsible: false,
+    collapsedClass: "collapsed",
+    collapsedByDefault: true,
     uiTabs: false
   }
   
@@ -69,6 +72,8 @@
           tabActiveClass: 'ui-tabs-selected'
         });
       }
+      // If collapsible is true and defaultTab specified, assume user wants defaultTab showing (not collapsed)
+      if ( options.collapsible && options.defaultTab ) $.fn.easytabs.defaults.collapsedByDefault = false;
       opts = $.extend({}, $.fn.easytabs.defaults, options);
       $tabs = $container.find(opts.tabs);
 
@@ -125,8 +130,12 @@
       $container.data("easytabs").defaultTab = $defaultTab;
       $container.data("easytabs").defaultTabLink = $defaultTabLink;
       
-      $panels.filter("#" + $defaultTabLink.attr("href").match(/#([^\?]+)/)[0].substr(1)).show().addClass(opts.panelActiveClass);
-      $defaultTab.addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
+      if( opts.collapsible && $selectedTab.size() == 0 && opts.collapsedByDefault ){
+        $defaultTab.addClass(opts.collapsedClass).children().addClass(opts.collapsedClass);
+      } else {
+        $panels.filter("#" + $defaultTabLink.attr("href").match(/#([^\?]+)/)[0].substr(1)).show().addClass(opts.panelActiveClass);
+        $defaultTab.addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
+      }
     },
     selectTab: function($container,callback){
       var $clicked = this,
@@ -142,48 +151,88 @@
           transitions = ( opts.animate ) ? {
             show: "fadeIn",
             hide: "fadeOut",
-            speed: opts.animationSpeed
+            speed: opts.animationSpeed,
+            collapse: "slideUp",
+            uncollapse: "slideDown"
           } :
           {
             show: "show",
             hide: "hide",
-            speed: 0
+            speed: 0,
+            collapse: "hide",
+            uncollapse: "show"
           };
       
-      if( ! $clicked.hasClass(opts.tabActiveClass) || ! $targetPanel.hasClass(opts.panelActiveClass) ){
+      if( opts.collapsible && ! skipUpdateToHash && ($clicked.hasClass(opts.tabActiveClass) || $clicked.hasClass(opts.collapsedClass)) ) {
         $panels.stop(true,true);
         if( fire($container,"easytabs:before") ){
+          $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
+          if( $clicked.hasClass(opts.collapsedClass) ){
+            $clicked.parent()
+              .removeClass(opts.collapsedClass)
+              .addClass(opts.tabActiveClass)
+              .children()
+                .removeClass(opts.collapsedClass)
+                .addClass(opts.tabActiveClass);
+            $targetPanel
+              .addClass(opts.panelActiveClass)
+              [transitions.uncollapse](transitions.speed, function(){
+                $container.trigger('easytabs:midTransition');
+                if(typeof callback == 'function') callback();
+              });
+          } else {
+            $clicked.parent().addClass(opts.collapsedClass).children().addClass(opts.collapsedClass);
+            $targetPanel
+              .removeClass(opts.panelActiveClass)
+              [transitions.collapse](transitions.speed, function(){
+                $container.trigger("easytabs:midTransition");
+                if(typeof callback == 'function') callback();
+              });
+          }
+        }
+      } else if( ! $clicked.hasClass(opts.tabActiveClass) || ! $targetPanel.hasClass(opts.panelActiveClass) ){
+        $panels.stop(true,true);
+        if( fire($container,"easytabs:before") ){
+          var $visiblePanel = $panels.filter(":visible"),
+              showPanel = function(){
+                $targetPanel
+                  [transitions.show](transitions.speed, function(){
+                    // Save the new tabs and panels to the container data (with new active tab/panel)
+                    $container.data("easytabs").tabs = $tabs;
+                    $container.data("easytabs").panels = $panels;
+                    $container.trigger("easytabs:after"); 
+                    // callback only gets called if selectTab actually does something, since it's inside the if block
+                    if(typeof callback == 'function'){
+                      callback();
+                    }
+                });
+              };
         
           // Change the active tab *first* to provide immediate feedback when the user clicks
           $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
+          $tabs.filter("." + opts.collapsedClass).removeClass(opts.collapsedClass).children().removeClass(opts.collapsedClass);
           $clicked.parent().addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
           
           $panels.filter("." + opts.panelActiveClass).removeClass(opts.panelActiveClass);
           $targetPanel.addClass(opts.panelActiveClass);
-          
-          $panels.filter(":visible")
-            [transitions.hide](transitions.speed, function(){
-              // At this point, the previous panel is hidden, and the new one will be selected
-              $container.trigger("easytabs:midTransition");
-              if ( opts.updateHash && ! skipUpdateToHash ) {
-                //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
-                // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
-                window.location.hash = $clicked.attr("href");
-              } else {
-                $container.data("easytabs").skipUpdateToHash = false;
-              }
-              $targetPanel
-                [transitions.show](transitions.speed, function(){
-                  // Save the new tabs and panels to the container data (with new active tab/panel)
-                  $container.data("easytabs").tabs = $tabs;
-                  $container.data("easytabs").panels = $panels;
-                  $container.trigger("easytabs:after"); 
-                  // callback only gets called if selectTab actually does something, since it's inside the if block
-                  if(typeof callback == 'function'){
-                    callback();
-                  }
-              });
-          });
+
+           // At this point, the previous panel is hidden, and the new one will be selected
+          $container.trigger("easytabs:midTransition");
+          if ( opts.updateHash && ! skipUpdateToHash ) {
+            //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
+            // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
+            window.location.hash = $clicked.attr("href");
+          } else {
+            $container.data("easytabs").skipUpdateToHash = false;
+          }
+
+          if( $visiblePanel.size() > 0 ) {
+            $visiblePanel
+              [transitions.hide](transitions.speed, showPanel);
+          } else {
+            $targetPanel
+              [transitions.uncollapse](transitions.speed, showPanel);
+          }
         }
       }
     },
@@ -198,6 +247,7 @@
           $tab = $tabs.find("a[href='" + hash + "']");
       if ( opts.updateHash ) {
         if( $tab.size() > 0 ){
+          $container.data("easytabs").skipUpdateToHash = true;
           $.fn.easytabs.methods.selectTab.apply( $tab, [$container] );
         } else if ( hash == '' && ! $defaultTab.hasClass(opts.tabActiveClass) && ! opts.cycle ) {
           $container.data("easytabs").skipUpdateToHash = true;
