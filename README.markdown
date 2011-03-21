@@ -78,12 +78,33 @@ The only rules you need to follow are these:
 
 * the container div also contains content divs (for the tabbed content), each div has a unique id that matches the href property of a link in the unordered list
 
-Other than that, go nuts. The order of the elements does NOT matter. Your `<ul>` could be before or after the content divs (or even between them). You can put non-tabbed content between the elements. It doesn't matter. Just make sure that the `<ul>` is a direct descendant of the container `<div>`.
+Other than that, go nuts. The order of the elements does NOT matter. Your `<ul>` could be before or after the content divs (or even between them). You can put non-tabbed content between the elements. It doesn't matter. The most common structure (for inspiration's sake) is something like this:
 
-    div#tab-container > ul > a
+    div#tab-container ul > ( li > a[href="tab-1"], li > a[href="second-tab"] )
     div#tab-container div#tab-1
     div#tab-container div#second-tab
 
+    +---------------------------------------------------------------------------+
+    |                              div#tab-container                            |
+    |  +---------------------------------------------------------------------+  |
+    |  |                                  ul                                 |  |
+    |  |  +-----------------------------+    +----------------------------+  |  |
+    |  |  |             li              |    |             li             |  |  |
+    |  |  |  +-----------------------+  |    |  +----------------------+  |  |  |
+    |  |  |  |    a[href="tab-1"]    |  |    |  | a[href="second-tab"] |  |  |  |
+    |  |  |  +-----------------------+  |    |  +----------------------+  |  |  |
+    |  |  +-----------------------------+    +----------------------------+  |  |
+    |  +---------------------------------------------------------------------+  |
+    |                                                                           |
+    |  +---------------------------------------------------------------------+  |
+    |  |                               div#tab-1                             |  |
+    |  +---------------------------------------------------------------------+  |
+    |                                                                           |
+    |  +---------------------------------------------------------------------+  |
+    |  |                             div#second-tab                          |  |
+    |  +---------------------------------------------------------------------+  |
+    |                                                                           |
+    +---------------------------------------------------------------------------+
 
 -------------------------------------------------------------------------------------------
 
@@ -96,6 +117,7 @@ For stylization, configuration options, and live demos, see the [EasyTabs homepa
 * [Full Documentation and Demos](http://www.alfajango.com/blog/jquery-easytabs-plugin/)
 * [Updates and new features for v1.1.2](http://www.alfajango.com/blog/jquery-easytabs-plugin-now-more-flexible-and-usable)
 * [Updates and new features for v2.0](http://www.alfajango.com/blog/jquery-easytabs-plugin-v2)
+* [Updates and new features for v2.1.2](http://www.alfajango.com/blog/jquery-easytabs-plugin-v2-1-2/)
 * [Download jQuery EasyTabs](http://plugins.jquery.com/project/easytabs)
 * [Fork and view source code](http://github.com/JangoSteve/jQuery-EasyTabs)
 
