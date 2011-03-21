@@ -73,7 +73,7 @@
         });
       }
       // If collapsible is true and defaultTab specified, assume user wants defaultTab showing (not collapsed)
-      if ( options.collapsible && options.defaultTab ) $.fn.easytabs.defaults.collapsedByDefault = false;
+      if ( options && options.collapsible && options.defaultTab ) $.fn.easytabs.defaults.collapsedByDefault = false;
       opts = $.extend({}, $.fn.easytabs.defaults, options);
       $tabs = $container.find(opts.tabs);
 
