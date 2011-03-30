@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 2.1.2
+ * jQuery EasyTabs plugin 2.2.0
  *
  * Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
  *
@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Sat Mar 21 03:00:00 2011 -0500
+ * Date: Sat Mar 30 17:00:00 2011 -0500
  */
 (function($) {
 
@@ -54,7 +54,11 @@
     collapsible: false,
     collapsedClass: "collapsed",
     collapsedByDefault: true,
-    uiTabs: false
+    uiTabs: false,
+    transitionIn: 'fadeIn',
+    transitionOut: 'fadeOut',
+    transitionCollapse: 'slideUp',
+    transitionUncollapse: 'slideDown'
   }
   
   $.fn.easytabs.methods = {
@@ -64,7 +68,12 @@
           $tabs,
           $panels = $(),
           $defaultTab,
-          $defaultTabLink;
+          $defaultTabLink,
+          animationSpeeds = {
+            fast: 200,
+            normal: 400,
+            slow: 600
+          };
 
       if ( options && options['uiTabs'] ) {
         $container.addClass('ui-tabs');
@@ -75,12 +84,16 @@
       // If collapsible is true and defaultTab specified, assume user wants defaultTab showing (not collapsed)
       if ( options && options.collapsible && options.defaultTab ) $.fn.easytabs.defaults.collapsedByDefault = false;
       opts = $.extend({}, $.fn.easytabs.defaults, options);
+      // Convert 'normal', 'fast', and 'slow' animation speed settings to their respective speed in milliseconds
+      if( typeof(opts.animationSpeed) == 'string' ) opts.animationSpeed = animationSpeeds[opts.animationSpeed];
       $tabs = $container.find(opts.tabs);
 
       $tabs.each(function(){
         targetId = $(this).children("a").attr("href").match(/#([^\?]+)/)[0].substr(1);
         $matchingPanel = $container.find("div[id=" + targetId + "]");
         if ( $matchingPanel.size() > 0 ) {
+          // Store panel height before hiding
+          $matchingPanel.data('easytabs', {height: $matchingPanel.height() });
           $panels = $panels.add($matchingPanel.hide());
         } else {
           $tabs = $tabs.not($(this)); // excludes tabs from set that don't have a target div
@@ -149,18 +162,20 @@
           $targetPanel = $panels.filter( $clicked.attr("href").match(/#([^\?]+)/)[0] ),
           $defaultTabLink = data.defaultTabLink,
           transitions = ( opts.animate ) ? {
-            show: "fadeIn",
-            hide: "fadeOut",
+            show: opts.transitionIn,
+            hide: opts.transitionOut,
             speed: opts.animationSpeed,
-            collapse: "slideUp",
-            uncollapse: "slideDown"
+            collapse: opts.transitionCollapse,
+            uncollapse: opts.transitionUncollapse,
+            halfSpeed: opts.animationSpeed / 2
           } :
           {
             show: "show",
             hide: "hide",
             speed: 0,
             collapse: "hide",
-            uncollapse: "show"
+            uncollapse: "show",
+            halfSpeed: 0
           };
       
       if( opts.collapsible && ! skipUpdateToHash && ($clicked.hasClass(opts.tabActiveClass) || $clicked.hasClass(opts.collapsedClass)) ) {
@@ -194,9 +209,20 @@
         $panels.stop(true,true);
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           var $visiblePanel = $panels.filter(":visible"),
+              $panelContainer = $targetPanel.parent(),
+              heightDifference = $targetPanel.data('easytabs').height - $visiblePanel.data('easytabs').height,
               showPanel = function(){
                 // At this point, the previous panel is hidden, and the new one will be selected
                 $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
+
+                // Gracefully animate between panels of differing heights, start height change animation *after* panel change if panel needs to contract,
+                // so that there is no chance of making the visible panel overflowing the height of the target panel
+                if( opts.animate && heightDifference < 0 ) $panelContainer.animate({
+                  height: $panelContainer.height() + heightDifference
+                },{
+                  duration: ( transitions.halfSpeed )
+                });
+
                 if ( opts.updateHash && ! skipUpdateToHash ) {
                   //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
                   // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
@@ -209,6 +235,7 @@
                     // Save the new tabs and panels to the container data (with new active tab/panel)
                     $container.data("easytabs").tabs = $tabs;
                     $container.data("easytabs").panels = $panels;
+
                     $container.trigger("easytabs:after", [$clicked, $targetPanel, data]); 
                     // callback only gets called if selectTab actually does something, since it's inside the if block
                     if(typeof callback == 'function'){
@@ -217,6 +244,21 @@
                 });
               };
         
+          // Gracefully animate between panels of differing heights, start height change animation *before* panel change if panel needs to expand,
+          // so that there is no chance of making the target panel overflowing the height of the visible panel
+          if( opts.animate ) {
+            if( heightDifference > 0 ) {
+              $panelContainer.animate({
+                height: ( $panelContainer.height() + heightDifference )
+              },{
+                duration: ( transitions.halfSpeed )
+              });
+            } else {
+              // Prevent height jumping before height transition is triggered at midTransition
+              $panelContainer.css({ height: $panelContainer.height() });
+            }
+          }
+
           // Change the active tab *first* to provide immediate feedback when the user clicks
           $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
           $tabs.filter("." + opts.collapsedClass).removeClass(opts.collapsedClass).children().removeClass(opts.collapsedClass);
