@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 2.2.1
+ * jQuery EasyTabs plugin 2.2.2
  *
  * Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
  *
@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Sat Mar 30 21:00:00 2011 -0500
+ * Date: Sat Apr 05 18:00:00 2011 -0500
  */
 (function($) {
 
@@ -93,7 +93,7 @@
         $matchingPanel = $container.find("div[id=" + targetId + "]");
         if ( $matchingPanel.size() > 0 ) {
           // Store panel height before hiding
-          $matchingPanel.data('easytabs', {height: $matchingPanel.outerHeight() });
+          $matchingPanel.data('easytabs', {position: $matchingPanel.css('position'), visibility: $matchingPanel.css('visibility')});
           $panels = $panels.add($matchingPanel.hide());
         } else {
           $tabs = $tabs.not($(this)); // excludes tabs from set that don't have a target div
@@ -149,6 +149,37 @@
         $panels.filter("#" + $defaultTabLink.attr("href").match(/#([^\?]+)/)[0].substr(1)).show().addClass(opts.panelActiveClass);
         $defaultTab.addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
       }
+    },
+    getHeightForHidden: function(){
+      if( this.data('easytabs') && this.data('easytabs').lastHeight ) return this.data('easytabs').lastHeight;
+      var display = this.css('display'), // this is the only property easytabs changes, so we need to grab its value on each tab change
+          height = this
+            // Workaround, because firefox returns wrong height if element itself has absolute positioning
+            .wrap($('<div>', {position: 'absolute', 'visibility': 'hidden', 'overflow': 'hidden'}))
+            .css({'position':'relative','visibility':'hidden','display':'block'})
+            .outerHeight();
+      this.unwrap();
+      // Return element to previous state
+      this.css({
+        position: this.data('easytabs').position,
+        visibility: this.data('easytabs').visibility,
+        display: display
+      });
+      // Cache height
+      $.extend(this.data('easytabs'), {lastHeight: height});
+      return height;
+    },
+    setAndReturnHeight: function() {
+      // Since the height of the visible panel may have been manipulated due to interaction,
+      // we want to re-cache the visible height on each tab change
+      var height = this.outerHeight(),
+          cache = {lastHeight: height};
+      if( this.data('easytabs') ) {
+        $.extend(this.data('easytabs'), cache);
+      } else {
+        this.data('easytabs', cache);
+      }
+      return height;
     },
     selectTab: function($container,callback){
       var $clicked = this,
@@ -210,8 +241,9 @@
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           var $visiblePanel = $panels.filter(":visible"),
               $panelContainer = $targetPanel.parent(),
-              heightDifference = $visiblePanel.length ? $targetPanel.data('easytabs').height - $visiblePanel.data('easytabs').height :
-                $targetPanel.data('easytabs').height,
+              targetHeight = $.fn.easytabs.methods.getHeightForHidden.apply($targetPanel),
+              visibleHeight = $visiblePanel.length ? $.fn.easytabs.methods.setAndReturnHeight.apply($visiblePanel) : 0,
+              heightDifference = targetHeight - visibleHeight,
               showPanel = function(){
                 // At this point, the previous panel is hidden, and the new one will be selected
                 $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
@@ -220,9 +252,7 @@
                 // so that there is no chance of making the visible panel overflowing the height of the target panel
                 if( opts.animate && opts.transitionIn == 'fadeIn' && heightDifference < 0 ) $panelContainer.animate({
                   height: $panelContainer.height() + heightDifference
-                },{
-                  duration: ( transitions.halfSpeed )
-                });
+                }, transitions.halfSpeed ).css({ 'min-height': '' });
 
                 if ( opts.updateHash && ! skipUpdateToHash ) {
                   //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
@@ -237,6 +267,7 @@
                     $container.data("easytabs").tabs = $tabs;
                     $container.data("easytabs").panels = $panels;
 
+                    $panelContainer.css({height: '', 'min-height': ''}); // After the transition, unset the height
                     $container.trigger("easytabs:after", [$clicked, $targetPanel, data]); 
                     // callback only gets called if selectTab actually does something, since it's inside the if block
                     if(typeof callback == 'function'){
@@ -244,19 +275,16 @@
                     }
                 });
               };
-        
           // Gracefully animate between panels of differing heights, start height change animation *before* panel change if panel needs to expand,
           // so that there is no chance of making the target panel overflowing the height of the visible panel
           if( opts.animate && opts.transitionOut == 'fadeOut' ) {
             if( heightDifference > 0 ) {
               $panelContainer.animate({
                 height: ( $panelContainer.height() + heightDifference )
-              },{
-                duration: ( transitions.halfSpeed )
-              });
+              }, transitions.halfSpeed );
             } else {
               // Prevent height jumping before height transition is triggered at midTransition
-              $panelContainer.css({ height: $panelContainer.height() });
+              $panelContainer.css({ 'min-height': $panelContainer.height() });
             }
           }
 
