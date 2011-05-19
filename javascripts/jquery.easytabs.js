@@ -122,11 +122,11 @@
       $.fn.easytabs.methods.setDefaultTab.apply($container);
       
       $tabs.children("a").bind("click.easytabs", function(e) {
+        e.preventDefault();
         $container.data("easytabs").opts.cycle = false;
         $container.data("easytabs").skipUpdateToHash = false;
         $clicked = $(this);
         $.fn.easytabs.methods.selectTab.apply($clicked, [$container]);
-        e.preventDefault();
       });
     },
     loadFromData: function(){
@@ -162,10 +162,12 @@
         $defaultPanel = $( $defaultTab.data('easytabs').panel );
         $defaultAjaxUrl = $defaultTab.data('easytabs').ajax;
 
-        if ( $defaultAjaxUrl ) {
-          $defaultPanel.load( $defaultAjaxUrl , function() {
-            $defaultPanel.data('easytabs').cached = true;
-          })
+        if ( $defaultAjaxUrl && (!opts.cache || !$defaultTab.data('easytabs').cached) ) {
+          $container.trigger('easytabs:ajax:beforeSend', [$defaultTabLink, $defaultPanel]);
+          $defaultPanel.load($defaultAjaxUrl, function(response, status, xhr){
+            $defaultTab.data('easytabs').cached = true;
+            $container.trigger('easytabs:ajax:complete', [$defaultTabLink, $defaultPanel, response, status, xhr]);
+          });
         }
 
         $defaultTab.data('easytabs').panel.show().addClass(opts.panelActiveClass);
@@ -238,9 +240,11 @@
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
           if( $clicked.hasClass(opts.collapsedClass) ){
-            if( ajaxUrl ) {
-              $targetPanel.load(ajaxUrl, function(){
+            if( ajaxUrl && (!opts.cache || !$clicked.parent().data('easytabs').cached) ) {
+              $container.trigger('easytabs:ajax:beforeSend', [$clicked, $targetPanel]);
+              $targetPanel.load(ajaxUrl, function(response, status, xhr){
                 $clicked.parent().data('easytabs').cached = true;
+                $container.trigger('easytabs:ajax:complete', [$clicked, $targetPanel, response, status, xhr]);
               });
             }
             $clicked.parent()
@@ -307,8 +311,10 @@
               };
 
           if ( ajaxUrl && (!opts.cache || !$clicked.parent().data('easytabs').cached) ) {
-            $targetPanel.load(ajaxUrl, function() {
+            $container.trigger('easytabs:ajax:beforeSend', [$clicked, $targetPanel]);
+            $targetPanel.load(ajaxUrl, function(response, status, xhr){
               $clicked.parent().data('easytabs').cached = true;
+              $container.trigger('easytabs:ajax:complete', [$clicked, $targetPanel, response, status, xhr]);
             });
           }
           // Gracefully animate between panels of differing heights, start height change animation *before* panel change if panel needs to expand,
