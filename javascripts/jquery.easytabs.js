@@ -125,7 +125,6 @@
         $container.data("easytabs").opts.cycle = false;
         $container.data("easytabs").skipUpdateToHash = false;
         $clicked = $(this);
-        e.preventDefault();
         $.fn.easytabs.methods.selectTab.apply($clicked, [$container]);
         e.preventDefault();
       });
