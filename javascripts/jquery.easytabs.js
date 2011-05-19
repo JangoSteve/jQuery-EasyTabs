@@ -58,7 +58,8 @@
     transitionIn: 'fadeIn',
     transitionOut: 'fadeOut',
     transitionCollapse: 'slideUp',
-    transitionUncollapse: 'slideDown'
+    transitionUncollapse: 'slideDown',
+    cache: true
   }
   
   $.fn.easytabs.methods = {
@@ -89,14 +90,24 @@
       $tabs = $container.find(opts.tabs);
 
       $tabs.each(function(){
-        targetId = $(this).children("a").attr("href").match(/#([^\?]+)/)[0].substr(1);
+        var $tab = $(this), $a = $tab.children('a'), targetId = $tab.children('a').data('target');
+
+        // If the tab has a `data-target` attribute, and is thus an ajax tab
+        if ( targetId !== undefined && targetId !== null ) {
+          $tab.data('easytabs', { ajax: $a.attr('href') });
+        } else {
+          targetId = $a.attr('href');
+        }
+
+        targetId = targetId.match(/#([^\?]+)/)[0].substr(1);
         $matchingPanel = $container.find("div[id=" + targetId + "]");
         if ( $matchingPanel.size() > 0 ) {
           // Store panel height before hiding
           $matchingPanel.data('easytabs', {position: $matchingPanel.css('position'), visibility: $matchingPanel.css('visibility')});
           $panels = $panels.add($matchingPanel.hide());
+          $tab.data('easytabs', $.extend($tab.data('easytabs'), {panel: $matchingPanel}));
         } else {
-          $tabs = $tabs.not($(this)); // excludes tabs from set that don't have a target div
+          $tabs = $tabs.not($tab); // excludes tabs from set that don't have a target div
         }
       });
       $('a.anchor').remove().prependTo('body');
@@ -114,6 +125,7 @@
         $container.data("easytabs").opts.cycle = false;
         $container.data("easytabs").skipUpdateToHash = false;
         $clicked = $(this);
+        e.preventDefault();
         $.fn.easytabs.methods.selectTab.apply($clicked, [$container]);
         e.preventDefault();
       });
@@ -128,9 +140,11 @@
           $tabs = data.tabs,
           $panels = data.panels,
           hash = window.location.hash.match(/^[^\?]*/)[0],
-          $selectedTab = $tabs.find("a[href='" + hash + "']").parent(),
+          $selectedTab = $tabs.find("a[href='" + hash + "'],a[data-target='" + hash + "']").first().parent(),
           $defaultTab,
-          $defaultTabLink;
+          $defaultTabLink,
+          $defaultPanel,
+          $defaultAjaxUrl;
       
       if( $selectedTab.size() == 1 ){
         $defaultTab = $selectedTab;
@@ -146,7 +160,16 @@
       if( opts.collapsible && $selectedTab.size() == 0 && opts.collapsedByDefault ){
         $defaultTab.addClass(opts.collapsedClass).children().addClass(opts.collapsedClass);
       } else {
-        $panels.filter("#" + $defaultTabLink.attr("href").match(/#([^\?]+)/)[0].substr(1)).show().addClass(opts.panelActiveClass);
+        $defaultPanel = $( $defaultTab.data('easytabs').panel );
+        $defaultAjaxUrl = $defaultTab.data('easytabs').ajax;
+
+        if ( $defaultAjaxUrl ) {
+          $defaultPanel.load( $defaultAjaxUrl , function() {
+            $defaultPanel.data('easytabs').cached = true;
+          })
+        }
+
+        $defaultTab.data('easytabs').panel.show().addClass(opts.panelActiveClass);
         $defaultTab.addClass(opts.tabActiveClass).children().addClass(opts.tabActiveClass);
       }
     },
@@ -190,7 +213,8 @@
           skipUpdateToHash = data.skipUpdateToHash,
           $tabs = data.tabs,
           $panels = data.panels,
-          $targetPanel = $panels.filter( $clicked.attr("href").match(/#([^\?]+)/)[0] ),
+          $targetPanel = $clicked.parent().data('easytabs').panel,
+          ajaxUrl = $clicked.parent().data('easytabs').ajax,
           $defaultTabLink = data.defaultTabLink,
           transitions = ( opts.animate ) ? {
             show: opts.transitionIn,
@@ -209,11 +233,17 @@
             halfSpeed: 0
           };
       
+      // Tab is collapsible and active => needs to be collapsed
       if( opts.collapsible && ! skipUpdateToHash && ($clicked.hasClass(opts.tabActiveClass) || $clicked.hasClass(opts.collapsedClass)) ) {
         $panels.stop(true,true);
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           $tabs.filter("." + opts.tabActiveClass).removeClass(opts.tabActiveClass).children().removeClass(opts.tabActiveClass);
           if( $clicked.hasClass(opts.collapsedClass) ){
+            if( ajaxUrl ) {
+              $targetPanel.load(ajaxUrl, function(){
+                $clicked.parent().data('easytabs').cached = true;
+              });
+            }
             $clicked.parent()
               .removeClass(opts.collapsedClass)
               .addClass(opts.tabActiveClass)
@@ -236,6 +266,7 @@
               });
           }
         }
+      // Tab is not active and panel is not active => select tab
       } else if( ! $clicked.hasClass(opts.tabActiveClass) || ! $targetPanel.hasClass(opts.panelActiveClass) ){
         $panels.stop(true,true);
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
@@ -257,7 +288,7 @@
                 if ( opts.updateHash && ! skipUpdateToHash ) {
                   //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
                   // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
-                  window.location.hash = $clicked.attr("href");
+                  window.location.hash = '#' + $targetPanel.attr('id');
                 } else {
                   $container.data("easytabs").skipUpdateToHash = false;
                 }
@@ -275,6 +306,12 @@
                     }
                 });
               };
+
+          if ( ajaxUrl && (!opts.cache || !$clicked.parent().data('easytabs').cached) ) {
+            $targetPanel.load(ajaxUrl, function() {
+              $clicked.parent().data('easytabs').cached = true;
+            });
+          }
           // Gracefully animate between panels of differing heights, start height change animation *before* panel change if panel needs to expand,
           // so that there is no chance of making the target panel overflowing the height of the visible panel
           if( opts.animate && opts.transitionOut == 'fadeOut' ) {
