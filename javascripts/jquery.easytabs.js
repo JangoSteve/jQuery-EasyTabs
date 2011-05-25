@@ -356,7 +356,7 @@
           $defaultTab = data.defaultTab,
           $defaultTabLink = data.defaultTabLink,
           hash = window.location.hash.match(/^[^\?]*/)[0],
-          $tab = $tabs.find("a[href='" + hash + "']");
+          $tab = $tabs.find("[href='" + hash + "'],[data-target='" + hash + "']").first();
       if ( opts.updateHash ) {
         if( $tab.size() > 0 ){
           $container.data("easytabs").skipUpdateToHash = true;
@@ -418,7 +418,9 @@
       if ( ($tab = $tabs.filter(tabSelector)).size() == 0 ) {                       // Find tab container that matches selector (like 'li#tab-one' which contains tab link)
         if ( ($tab = $tabs.find("a[href='" + tabSelector + "']")).size() == 0 ) {   // Find direct tab link that matches href (like 'a[href="#panel-1"]')
           if ( ($tab = $tabs.find("a" + tabSelector)).size() == 0 ) {               // Find direct tab link that matches selector (like 'a#tab-1')
-            $.error('Tab \'' + tabSelector + '\' does not exist in tab set');
+            if ( ($tab = $tabs.find("[data-target='" + tabSelector + "']")).size() == 0 ) { // Find direct tab link that matches data-target (lik 'a[data-target="#panel-1"]')
+              $.error('Tab \'' + tabSelector + '\' does not exist in tab set');
+            }
           }
         }
       } else {
