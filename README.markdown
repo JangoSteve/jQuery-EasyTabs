@@ -25,7 +25,7 @@ Unlike jQuery UI tabs, which style and arrange your tabs and panels for you, thi
 <table style="width: 100%;">
 <tr>
 <td>
-Show your support by helping us raise money for the Karmanos Cancer
+Show your support for jQuery EasyTabs, by helping us raise money for the Karmanos Cancer
 Institute.
 </td>
 <td style="text-align: left; width: 35%;">
