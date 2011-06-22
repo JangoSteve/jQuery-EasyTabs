@@ -28,8 +28,8 @@ Unlike jQuery UI tabs, which style and arrange your tabs and panels for you, thi
 Show your support by helping us raise money for the Karmanos Cancer
 Institute.
 </td>
-<td style="text-align: left; width: 25%;">
-<a href='http://www.pledgie.com/campaigns/15528'><img alt='Click here to lend your support to: Karmanos Cancer Institute by Alfa Jango and make a donation at www.pledgie.com !' src='http://www.pledgie.com/campaigns/15528.png?skin_name=chrome' border='0' /></a>
+<td style="text-align: left; width: 35%;">
+<a href='http://pledgie.com/campaigns/15528'><img alt='Click here to lend your support to: Karmanos Cancer Institute by Alfa Jango and make a donation at www.pledgie.com !' src='http://pledgie.com/campaigns/15528.png?skin_name=chrome' border='0' /></a>
 </td>
 </tr>
 </table>
