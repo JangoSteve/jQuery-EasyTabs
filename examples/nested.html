@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"> 
+	<head profile="http://gmpg.org/xfn/11"> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+		 
+		<title>JQuery EasyTabs Demo &#8211; Basic &#45; Alfa Jango Blog</title> 
+		<script src="../javascripts/jquery-1.6.2.min.js" type="text/javascript"></script> 
+		<script src="../javascripts/jquery.hashchange.min.js" type="text/javascript"></script>
+		<script src="../javascripts/jquery.easytabs.js" type="text/javascript"></script>
+		
+		<style>
+			.tab-container ul { margin: 0; padding: 0; }
+			.tab-container ul li { display: inline-block; background: #ccc; border: solid 1px; border-bottom: none; }
+			.tab-container ul li a { display: block; padding: 5px; outline: none; }
+			.tab-container ul li a:hover { text-decoration: underline; }
+			.tab-container ul li.active { background: #fff; padding-top: 6px; position: relative; top: 1px; }
+			.tab-container ul li a.active { font-weight: bold; }
+			.tab-container .panel-container { border: solid 1px; padding: 0 10px; }
+		</style>
+		<script type="text/javascript"> 
+		  $(document).ready(function(){ $('#outer-container').easytabs(); });
+		  $(document).ready(function(){ $('#inner-container').easytabs(); });
+		</script>
+	</head>
+	<body>
+		<div class="tab-container" id="outer-container">
+		  <ul>
+		    <li><a href="#tab-1-div">Tab 1</a></li>
+		    <li><a href="#that-other-tab">The Second Tab</a></li>
+		    <li><a href="#lastly">Tab C</a></li>
+		  </ul>
+		  <div class="panel-container">
+		    <div id="tab-1-div">
+		      <h2>Heading 1</h2>
+		      <p>This is the content of the first tab.</p>
+		    </div>
+		    <div id="that-other-tab">
+		      <h2>Heading 2</h2>
+		      <p>Stuff from the second tab.</p>
+		    </div>
+		    <div id="lastly">
+		      <h2>Heading 3</h2>
+		      <p>More stuff from the last tab.</p>
+
+          <div class="tab-container" id="inner-container">
+            <ul>
+              <li><a href="#tab-a">Subtab A</a></li>
+              <li><a href="#tab-b">Subtab B</a></li>
+              <li><a href="#tab-c">Subtab C</a></li>
+            </ul>
+            <div class="panel-container">
+              <div id="tab-a">
+                <h3>Heading A</h3>
+                <p>This is a nested first tab</p>
+              </div>
+              <div id="tab-b">
+                <h3>Heading B</h3>
+                <p>This is a nested second tab</p>
+              </div>
+              <div id="tab-c">
+                <h3>Heading C</h3>
+                <p>This is a nested third tab</p>
+              </div>
+            </div>
+            <br />
+          </div>
+		    </div>
+		  </div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,102 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"> 
+	<head profile="http://gmpg.org/xfn/11"> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+		 
+		<title>JQuery EasyTabs try out custom Next/previous links</title> 
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js" type="text/javascript"></script> 
+		<script src="../javascripts/jquery.hashchange.min.js" type="text/javascript"></script>
+		<script src="../javascripts/jquery.easytabs.js" type="text/javascript"></script>
+		
+		<style>
+      * { padding: 0; margin: 0 } /* reset browser default margins and paddings */
+      body { padding: 15px; }
+            
+      #tabs { background: #fff; padding: 5px; border: solid 1px; width:500px}
+      #tabs ul { margin: 0; padding: 5px 5px 0; background: #ccc; border: solid 1px; }
+      #tabs ul li { display: inline-block; background: #eee; border: solid 1px; border-bottom: none; margin: 0; }
+      #tabs ul li a { display: block; padding: 5px; outline: none; }
+      #tabs ul li a:hover { text-decoration: underline; }
+      #tabs ul li.active { background: #fff; padding-top: 6px; position: relative; top: 1px; }
+      #tabs ul li a.active { font-weight: bold; }
+      #tabs .panel-container { border: none; padding: 0 10px; background: #fff; margin: 15px 0; }
+      .prev-tab{}
+      .next-tab{float:right}
+		</style>
+		<script type="text/javascript"> 
+      $(document).ready(function(){
+       
+        $('#tabs').easytabs({
+          collapsible: true,
+          transitionIn: 'slideDown',
+          transitionOut: 'slideUp',
+          transitionCollapse: 'fadeOut',
+          transitionUncollapse: 'fadeIn'
+        });
+           
+
+ var $tabs = $('#tabs').data('easytabs').tabs;
+
+    $(".ui-tabs-panel").each(function(i){
+      var totalSize = $(".ui-tabs-panel").size();
+      if (i != totalSize) {
+        next = i + 1;
+        $(this).append("<a href='#' class='next-tab mover' rel='" + next + "'>Next Page »</a>");
+      }
+      if (i != 0) {
+        prev = i - 1;
+        $(this).append("<a href='#' class='prev-tab mover' rel='" + prev + "'>« Prev Page</a>");
+      }
+    });
+
+    $('.next-tab, .prev-tab').click(function() {
+      var i = parseInt($(this).attr('rel'));
+      var tabSelector = $tabs.children('a:eq(' + i + ')').attr('href');
+      $('#tabs').easytabs('select', tabSelector);
+      return false;
+    });
+   
+   });
+
+
+
+		</script>
+
+
+	</head>
+	<body>
+	
+	
+	
+
+        <h2>
+      Next/previous links,
+      <br />
+      and fadeOut and fadeIn for collapsing transitions
+    </h2>
+    <div id="tabs">
+      <ul>
+
+        <li><a href="#tab1">Tab 1</a></li>
+        <li><a href="#tab2">Tab 2</a></li>
+        <li><a href="#tab3">Tab 3</a></li>
+      </ul>
+      <div class="panel-container">
+        <div id="tab1" class="ui-tabs-panel">
+          <h2>Heading 1</h2>
+
+          <p>This is the content of the first tab.</p>
+        </div>
+        <div id="tab2" class="ui-tabs-panel">
+          <h2>Heading 2</h2>
+          <p>Stuff from the second tab.</p>
+        </div>
+        <div id="tab3" class="ui-tabs-panel">
+
+          <h2>Heading 3</h2>
+          <p>More stuff from the last tab.</p>
+        </div>
+      </div>
+    </div>
+	</body>
+</html>
+
