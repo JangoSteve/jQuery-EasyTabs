@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 2.2.2
+ * jQuery EasyTabs plugin 2.3.1
  *
  * Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
  *
@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Sat Apr 05 18:00:00 2011 -0500
+ * Date: Thu Jul 15 00:15:00 2011 -0500
  */
 (function($) {
 
@@ -117,7 +117,7 @@
         skipUpdateToHash: false,
         tabs: $tabs,
         panels: $panels
-      });
+      }).attr('data-easytabs', true);
       
       $.fn.easytabs.methods.setDefaultTab.apply($container);
       
@@ -139,18 +139,29 @@
           $tabs = data.tabs,
           $panels = data.panels,
           hash = window.location.hash.match(/^[^\?]*/)[0],
-          $selectedTab = $tabs.find("a[href='" + hash + "'],a[data-target='" + hash + "']").first().parent(),
+          $selectedTab = $.fn.easytabs.methods.matchTab($tabs, hash).parent(),
           $defaultTab,
           $defaultTabLink,
           $defaultPanel,
-          $defaultAjaxUrl;
+          $defaultAjaxUrl,
+          $panel;
       
+      // If hash directly matches one of the tabs, active on page-load
       if( $selectedTab.size() == 1 ){
         $defaultTab = $selectedTab;
         $container.data("easytabs").opts.cycle = false;
       } else {
-        $defaultTab = $tabs.parent().find(opts.defaultTab);
-        if ( $defaultTab.size() == 0 ) { $.error("The specified default tab ('" + opts.defaultTab + "') could not be found in the tab set."); }
+        $panel = $.fn.easytabs.methods.matchInPanel($panels, hash);
+        // If one of the panels contains the element matching the hash,
+        // make it active on page-load
+        if ( $panel.length ) {
+          hash = '#' + $panel.attr('id');
+          $defaultTab = $.fn.easytabs.methods.matchTab($tabs, hash).parent();
+        // Otherwise, make the default tab the one that's active on page-load
+        } else {
+          $defaultTab = $tabs.parent().find(opts.defaultTab);
+          if ( $defaultTab.size() == 0 ) { $.error("The specified default tab ('" + opts.defaultTab + "') could not be found in the tab set."); }
+        }
       }
       $defaultTabLink = $defaultTab.children("a").first();
       $container.data("easytabs").defaultTab = $defaultTab;
@@ -348,22 +359,44 @@
         }
       }
     },
-    selectTabFromHashChange: function(){
+    matchTab: function($tabs, hash) {
+      return $tabs.find("[href='" + hash + "'],[data-target='" + hash + "']").first();
+    },
+    matchInPanel: function($panels, hash) {
+      return $panels.filter(':has(' + hash + ')').first();
+    },
+    selectTabFromHashChange: function() {
       var $container = this,
           data = $.fn.easytabs.methods.loadFromData.apply($container),
           opts = data.opts,
           $tabs = data.tabs,
+          $panels = data.panels,
           $defaultTab = data.defaultTab,
           $defaultTabLink = data.defaultTabLink,
           hash = window.location.hash.match(/^[^\?]*/)[0],
-          $tab = $tabs.find("[href='" + hash + "'],[data-target='" + hash + "']").first();
+          $tab = $.fn.easytabs.methods.matchTab($tabs, hash),
+          $panel;
       if ( opts.updateHash ) {
-        if( $tab.size() > 0 ){
+        // If hash directly matches tab
+        if( $tab.length ){
           $container.data("easytabs").skipUpdateToHash = true;
           $.fn.easytabs.methods.selectTab.apply( $tab, [$container] );
-        } else if ( hash == '' && ! $defaultTab.hasClass(opts.tabActiveClass) && ! opts.cycle ) {
-          $container.data("easytabs").skipUpdateToHash = true;
-          $.fn.easytabs.methods.selectTab.apply( $defaultTabLink, [$container] );
+        } else {
+          $panel = $.fn.easytabs.methods.matchInPanel($panels, hash);
+          // If panel contains element matching hash
+          if ( $panel.length ) {
+            hash = '#' + $panel.attr('id');
+            $tab = $.fn.easytabs.methods.matchTab($tabs, hash);
+            $container.data('easytabs').skipUpdateToHash = true;
+            $.fn.easytabs.methods.selectTab.apply( $tab, [$container] );
+          // If default tab is not active...
+          } else if ( ! $defaultTab.hasClass(opts.tabActiveClass) && ! opts.cycle ) {
+            // ...and hash is blank or matches a parent of the tab container
+            if ( hash == '' || $container.closest(hash).length ) {
+              $container.data("easytabs").skipUpdateToHash = true;
+              $.fn.easytabs.methods.selectTab.apply( $defaultTabLink, [$container] );
+            }
+          }
         }
       }
     },
