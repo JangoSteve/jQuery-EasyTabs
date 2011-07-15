@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 2.3.1
+ * jQuery EasyTabs plugin 2.3.2
  *
  * Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
  *
@@ -7,9 +7,9 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Thu Jul 15 00:15:00 2011 -0500
+ * Date: Thu Jul 15 11:40:00 2011 -0500
  */
-(function($) {
+( function($) {
 
   // Triggers an event on an element and returns the event result
 	function fire(obj, name, data) {
@@ -363,7 +363,7 @@
       return $tabs.find("[href='" + hash + "'],[data-target='" + hash + "']").first();
     },
     matchInPanel: function($panels, hash) {
-      return $panels.filter(':has(' + hash + ')').first();
+      return ( hash ? $panels.filter(':has(' + hash + ')').first() : [] );
     },
     selectTabFromHashChange: function() {
       var $container = this,
