@@ -100,7 +100,7 @@
         }
 
         targetId = targetId.match(/#([^\?]+)/)[0].substr(1);
-        $matchingPanel = $container.find("div[id=" + targetId + "]");
+        $matchingPanel = $container.find("#" + targetId);
         if ( $matchingPanel.size() > 0 ) {
           // Store panel height before hiding
           $matchingPanel.data('easytabs', {position: $matchingPanel.css('position'), visibility: $matchingPanel.css('visibility')});
