@@ -286,18 +286,23 @@
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           var $visiblePanel = $panels.filter(":visible"),
               $panelContainer = $targetPanel.parent(),
-              targetHeight = $.fn.easytabs.methods.getHeightForHidden.apply($targetPanel),
-              visibleHeight = $visiblePanel.length ? $.fn.easytabs.methods.setAndReturnHeight.apply($visiblePanel) : 0,
-              heightDifference = targetHeight - visibleHeight,
               showPanel = function(){
                 // At this point, the previous panel is hidden, and the new one will be selected
                 $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
 
                 // Gracefully animate between panels of differing heights, start height change animation *after* panel change if panel needs to contract,
                 // so that there is no chance of making the visible panel overflowing the height of the target panel
-                if( opts.animate && opts.transitionIn == 'fadeIn' && heightDifference < 0 ) $panelContainer.animate({
-                  height: $panelContainer.height() + heightDifference
-                }, transitions.halfSpeed ).css({ 'min-height': '' });
+                if( opts.animate && opts.transitionIn == 'fadeIn')
+                {
+                  var targetHeight = $.fn.easytabs.methods.getHeightForHidden.apply($targetPanel),
+                  visibleHeight = $visiblePanel.length ? $.fn.easytabs.methods.setAndReturnHeight.apply($visiblePanel) : 0,
+                  heightDifference = targetHeight - visibleHeight;
+                	
+                  if (heightDifference < 0)
+                    $panelContainer.animate({
+                      height: $panelContainer.height() + heightDifference
+                    }, transitions.halfSpeed ).css({ 'min-height': '' });
+                }                
 
                 if ( opts.updateHash && ! skipUpdateToHash ) {
                   //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
