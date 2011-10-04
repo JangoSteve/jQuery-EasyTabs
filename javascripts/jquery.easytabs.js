@@ -286,45 +286,51 @@
         if( fire($container,"easytabs:before", [$clicked, $targetPanel, data]) ){
           var $visiblePanel = $panels.filter(":visible"),
               $panelContainer = $targetPanel.parent(),
-              showPanel = function(){
-                // At this point, the previous panel is hidden, and the new one will be selected
-                $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
+              targetHeight,
+              visibleHeight,
+              heightDifference,
+              showPanel;
 
-                // Gracefully animate between panels of differing heights, start height change animation *after* panel change if panel needs to contract,
-                // so that there is no chance of making the visible panel overflowing the height of the target panel
-                if( opts.animate && opts.transitionIn == 'fadeIn')
-                {
-                  var targetHeight = $.fn.easytabs.methods.getHeightForHidden.apply($targetPanel),
-                  visibleHeight = $visiblePanel.length ? $.fn.easytabs.methods.setAndReturnHeight.apply($visiblePanel) : 0,
-                  heightDifference = targetHeight - visibleHeight;
-                	
-                  if (heightDifference < 0)
-                    $panelContainer.animate({
-                      height: $panelContainer.height() + heightDifference
-                    }, transitions.halfSpeed ).css({ 'min-height': '' });
-                }                
+          if (opts.animate) {
+            targetHeight = $.fn.easytabs.methods.getHeightForHidden.apply($targetPanel);
+            visibleHeight = $visiblePanel.length ? $.fn.easytabs.methods.setAndReturnHeight.apply($visiblePanel) : 0;
+            heightDifference = targetHeight - visibleHeight;
+          }
 
-                if ( opts.updateHash && ! skipUpdateToHash ) {
-                  //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
-                  // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
-                  window.location.hash = '#' + $targetPanel.attr('id');
-                } else {
-                  $container.data("easytabs").skipUpdateToHash = false;
+          showPanel = function(){
+            // At this point, the previous panel is hidden, and the new one will be selected
+            $container.trigger("easytabs:midTransition", [$clicked, $targetPanel, data]);
+
+            // Gracefully animate between panels of differing heights, start height change animation *after* panel change if panel needs to contract,
+            // so that there is no chance of making the visible panel overflowing the height of the target panel
+            if (opts.animate && opts.transitionIn == 'fadeIn') {
+              if (heightDifference < 0)
+                $panelContainer.animate({
+                  height: $panelContainer.height() + heightDifference
+                }, transitions.halfSpeed ).css({ 'min-height': '' });
+            }
+
+            if ( opts.updateHash && ! skipUpdateToHash ) {
+              //window.location = url.toString().replace((url.pathname + hash), (url.pathname + $clicked.attr("href")));
+              // Not sure why this behaves so differently, but it's more straight forward and seems to have less side-effects
+              window.location.hash = '#' + $targetPanel.attr('id');
+            } else {
+              $container.data("easytabs").skipUpdateToHash = false;
+            }
+            $targetPanel
+              [transitions.show](transitions.speed, function(){
+                // Save the new tabs and panels to the container data (with new active tab/panel)
+                $container.data("easytabs").tabs = $tabs;
+                $container.data("easytabs").panels = $panels;
+
+                $panelContainer.css({height: '', 'min-height': ''}); // After the transition, unset the height
+                $container.trigger("easytabs:after", [$clicked, $targetPanel, data]); 
+                // callback only gets called if selectTab actually does something, since it's inside the if block
+                if(typeof callback == 'function'){
+                  callback();
                 }
-                $targetPanel
-                  [transitions.show](transitions.speed, function(){
-                    // Save the new tabs and panels to the container data (with new active tab/panel)
-                    $container.data("easytabs").tabs = $tabs;
-                    $container.data("easytabs").panels = $panels;
-
-                    $panelContainer.css({height: '', 'min-height': ''}); // After the transition, unset the height
-                    $container.trigger("easytabs:after", [$clicked, $targetPanel, data]); 
-                    // callback only gets called if selectTab actually does something, since it's inside the if block
-                    if(typeof callback == 'function'){
-                      callback();
-                    }
-                });
-              };
+            });
+          };
 
           if ( ajaxUrl && (!opts.cache || !$clicked.parent().data('easytabs').cached) ) {
             $container.trigger('easytabs:ajax:beforeSend', [$clicked, $targetPanel]);
