@@ -1,0 +1,42 @@
+{
+  "name": "EasyTabs",
+  "description": "The jQuery EasyTabs plugin handles all of the functionality of tabs and none of the styling.",
+  "version": "2.3.3",
+  "keywords": [
+    "tabs"
+  ],
+  "maintainers": [
+    {
+      "name": "Steve Schwartz",
+      "email": "steve@alfajango.com",
+      "web": "http://www.alfajango.com/blog"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Steve Schwartz",
+      "email": "steve@alfajango.com",
+      "web": "http://www.alfajango.com/blog"
+    }
+  ],
+  "dependencies": {
+    "jquery": "1.4"
+  },
+  "optionalDependencies": {
+    "hashchange": "",
+    "address": ""
+  },
+  "demos": [
+    "/examples/basic.html",
+    "/examples/bottom.html",
+    "/examples/collapsible-and-cancel.html",
+    "/examples/disconnected.html",
+    "/examples/height-and-transition-options.html",
+    "/examples/multiple.html",
+    "/examples/nested.html",
+    "/examples/side.html",
+    "/examples/non-div-panesl.html",
+    "/examples/prev-next.html",
+    "/examples/ajax.html"
+  ]
+}
