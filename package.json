@@ -53,6 +53,10 @@
     {
       "name": "MIT",
       "url": "http://www.opensource.org/licenses/mit-license.php"
+    },
+    {
+      "name": "GPL",
+      "url": "http://www.gnu.org/licenses/gpl.html"
     }
   ],
   "homepage": "http://www.alfajango.com/blog/jquery-easytabs-plugin/"
