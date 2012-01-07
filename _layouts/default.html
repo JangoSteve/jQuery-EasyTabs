@@ -3,6 +3,16 @@
     <title>{{ page.title }}</title>
   </head>
   <body>
-   {{ content }}
+    <div class='toc'>
+      <ul>
+        {% for link in page.links %}
+        <li><a href="{{ link.href }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div id='post'>
+      {{ content }}
+    </div>
   </body>
 </html>
