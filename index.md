@@ -82,7 +82,7 @@ The HTML markup for your tabs and content can be arranged however you want. At t
 
 ### The Javascript
 
-To enable back- and forward-button support for the users’ browsers, be sure to include either the jQuery HashChange plugin (recommended) or the Address plugin before including the EasyTabs plugin. There is no other configuration required, it will just work!
+To enable back- and forward-button support for the users' browsers, be sure to include either the jQuery HashChange plugin (recommended) or the Address plugin before including the EasyTabs plugin. There is no other configuration required, it will just work!
 
 {% highlight html %}
 <script src="/javascripts/jquery.js" type="text/javascript"></script> 
@@ -96,7 +96,7 @@ To enable back- and forward-button support for the users’ browsers, be sure to
 </script>
 {% endhighlight %}
 
-I varied the tab ids and names just to show you how flexible this is. There is no magic going on with this plugin; it’s not trying to guess the order of your tabs or which tab matches which panel. Just make the href of the tab link match the id of the panel <div>.
+I varied the tab ids and names just to show you how flexible this is. There is no magic going on with this plugin; it's not trying to guess the order of your tabs or which tab matches which panel. Just make the href of the tab link match the id of the panel <div>.
 
 ## Required Markup
 
@@ -105,12 +105,12 @@ The only rules you need to follow are these:
 a container `<div>`
 the container contains a collection (a `<ul>` by default) of links `<a>`
 the container also contains panel divs (for the tabbed content), each div has a unique id that matches the href property of a link in the tab collection
-Other than that, go nuts. The order of the elements does NOT matter. Your tabs could be before or after the panels. You can put non-tabbed content between the elements. You could even put the tabs inside one of the panels! It doesn’t matter.
+Other than that, go nuts. The order of the elements does NOT matter. Your tabs could be before or after the panels. You can put non-tabbed content between the elements. You could even put the tabs inside one of the panels! It doesn't matter.
 
 
 ## Styling Tabs and Content
 
-To style your tabs, you simply use your own CSS and stylesheet. Here’s some very basic styling to get you started:
+To style your tabs, you simply use your own CSS and stylesheet. Here's some very basic styling to get you started:
 
 {% highlight css %}
 #tab-container ul { margin: 0; padding: 0; }
@@ -150,9 +150,9 @@ EasyTabs will simply add the .active class to the currently selected tab and pan
 
 ## AJAX Tabs
 
-Sometimes we want to load content into a tab from another page via AJAX. In order to do that, we’ll change the markup of the tabs a little bit. The difference in markup is to keep things semantically meaningful and gracefully degradable (see explanation).
+Sometimes we want to load content into a tab from another page via AJAX. In order to do that, we'll change the markup of the tabs a little bit. The difference in markup is to keep things semantically meaningful and gracefully degradable (see explanation).
 
-For AJAX tabs, the URL for the content goes in the href attribute, and we move the target panel’s id to the data-target attribute:
+For AJAX tabs, the URL for the content goes in the href attribute, and we move the target panel's id to the data-target attribute:
 
 {% highlight html %}
 <a href="/some/ajax/path.html" data-target="#panel-1" class="tabs">I'm a tab</a>
@@ -199,7 +199,7 @@ e.g. "li:first-child" or "li#tab-2"
 panelActiveClass	Adds specified class to the currently-selected content <div>	any class name string 
 e.g. "active" or "selected" 
 ("active")
-tabActiveClass	Adds specified class to the currently-selected tab <li> (and it’s descendants).	any class name string e.g. "active" or "selected" 
+tabActiveClass	Adds specified class to the currently-selected tab <li> (and it's descendants).	any class name string e.g. "active" or "selected" 
 ("active")
 tabs
 v1.1.2	The container element for your tabs, relative to the container element that easyTabs was applied to.	any jquery selector referencing your collection of tabs 
@@ -218,12 +218,12 @@ transitionUncollapse
 v2.2	The jQuery effect used to un-collapse the panel if collapsible: true.	'fadeIn', 'slideDown', 'show' 
 (slideDown)
 updateHash
-v1.1.2	Tells easyTabs whether or not to update the browser window’s URL hash, useful for SEO and bookmarking.	true, false 
+v1.1.2	Tells easyTabs whether or not to update the browser window's URL hash, useful for SEO and bookmarking.	true, false 
 (true)
 uiTabs
 v2.1	Automatically uses class names and defaults of jQuery UI tabs, making it easy to switch from jQuery-UI tabs without needing to change any HTML or CSS styles.	true, false 
 (false)
-Here’s an example that uses all of the configuration options:
+Here's an example that uses all of the configuration options:
 
 {% highlight js %}
 $("#tab-container").easytabs({
