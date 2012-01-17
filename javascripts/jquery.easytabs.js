@@ -59,6 +59,10 @@
     transitionOut: 'fadeOut',
     transitionCollapse: 'slideUp',
     transitionUncollapse: 'slideDown',
+    containerClass: "",
+    tabsClass: "",
+    tabClass: "",
+    panelClass: "",
     cache: true
   }
   
@@ -77,11 +81,15 @@
           };
 
       if ( options && options['uiTabs'] ) {
-        $container.addClass('ui-tabs');
-        $.extend($.fn.easytabs.defaults, {
-          tabActiveClass: 'ui-tabs-selected'
+        $.extend(options, {
+          tabActiveClass: 'ui-tabs-selected',
+          containerClass: 'ui-tabs ui-widget ui-widget-content ui-corner-all',
+          tabsClass: 'ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all',
+          tabClass: 'ui-state-default ui-corner-top',
+          panelClass: 'ui-tabs-panel ui-widget-content ui-corner-bottom'
         });
       }
+
       // If collapsible is true and defaultTab specified, assume user wants defaultTab showing (not collapsed)
       if ( options && options.collapsible && options.defaultTab ) $.fn.easytabs.defaults.collapsedByDefault = false;
       opts = $.extend({}, $.fn.easytabs.defaults, options);
@@ -110,6 +118,12 @@
           $tabs = $tabs.not($tab); // excludes tabs from set that don't have a target div
         }
       });
+
+      $container.addClass(opts['containerClass']);
+      $tabs.parent().addClass(opts['tabsClass']);
+      $tabs.addClass(opts['tabClass']);
+      $panels.addClass(opts['panelClass']);
+
       $('a.anchor').remove().prependTo('body');
       
       $container.data("easytabs", {
