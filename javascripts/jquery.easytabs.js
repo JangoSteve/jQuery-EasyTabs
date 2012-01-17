@@ -1,5 +1,5 @@
 /*
- * jQuery EasyTabs plugin 2.3.3
+ * jQuery EasyTabs plugin 2.3.4
  *
  * Copyright (c) 2010-2011 Steve Schwartz (JangoSteve)
  *
@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Date: Thu Sep 15 09:50:00 2011 -0500
+ * Date: Tue Jan 17 17:15:00 2012 -0500
  */
 ( function($) {
 

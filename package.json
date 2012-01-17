@@ -1,7 +1,7 @@
 {
   "name": "EasyTabs",
   "description": "The jQuery EasyTabs plugin handles all of the functionality of tabs and none of the styling.",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "keywords": [
     "tabs"
   ],
