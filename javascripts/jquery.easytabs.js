@@ -45,8 +45,6 @@
         },
         plugin = this,
         $container = $(container),
-        $tabs,
-        $panels,
         $defaultTab,
         $defaultTabLink,
         transitions,
@@ -71,7 +69,7 @@
       }
 
       // If collapsible is true and defaultTab specified, assume user wants defaultTab showing (not collapsed)
-      if ( settings.collapsible && settings.defaultTab ) {
+      if ( settings.collapsible && options.defaultTab !== undefined && options.collpasedByDefault === undefined ) {
         settings.collapsedByDefault = false;
       }
 
@@ -115,7 +113,7 @@
     };
 
     plugin.bindToTabClicks = function() {
-      $tabs.children("a").bind("click.easytabs", function(e) {
+      plugin.tabs.children("a").bind("click.easytabs", function(e) {
         settings.cycle = false;
         skipUpdateToHash = false;
         plugin.selectTab( $(this) );
@@ -126,10 +124,10 @@
     plugin.getTabs = function() {
       var $matchingPanel;
 
-      $tabs = $container.find(settings.tabs),
-      $panels = $(),
+      plugin.tabs = $container.find(settings.tabs),
+      plugin.panels = $(),
 
-      $tabs.each(function(){
+      plugin.tabs.each(function(){
         var $tab = $(this),
             $a = $tab.children('a'),
             targetId = $tab.children('a').data('target');
@@ -153,20 +151,20 @@
             visibility: $matchingPanel.css('visibility')
           });
 
-          $panels = $panels.add($matchingPanel.hide());
+          plugin.panels = plugin.panels.add($matchingPanel.hide());
 
           $tab.data('easytabs').panel = $matchingPanel;
         } else {
-          $tabs = $tabs.not($tab); // excludes tabs from set that don't have a target div
+          plugin.tabs = plugin.tabs.not($tab); // excludes tabs from set that don't have a target div
         }
       });
     };
 
     plugin.addClasses = function() {
       $container.addClass(settings.containerClass);
-      $tabs.parent().addClass(settings.tabsClass);
-      $tabs.addClass(settings.tabClass);
-      $panels.addClass(settings.panelClass);
+      plugin.tabs.parent().addClass(settings.tabsClass);
+      plugin.tabs.addClass(settings.tabClass);
+      plugin.panels.addClass(settings.panelClass);
     };
 
     plugin.setDefaultTab = function(){
@@ -190,7 +188,7 @@
 
         // Otherwise, make the default tab the one that's active on page-load
         } else {
-          $defaultTab = $tabs.parent().find(settings.defaultTab);
+          $defaultTab = plugin.tabs.parent().find(settings.defaultTab);
           if ( $defaultTab.length === 0 ) {
             $.error("The specified default tab ('" + settings.defaultTab + "') could not be found in the tab set.");
           }
@@ -290,10 +288,10 @@
     };
 
     plugin.toggleTabCollapse = function($clicked, $targetPanel, ajaxUrl, callback) {
-      $panels.stop(true,true);
+      plugin.panels.stop(true,true);
 
       if( fire($container,"easytabs:before", [$clicked, $targetPanel, settings]) ){
-        $tabs.filter("." + settings.tabActiveClass).removeClass(settings.tabActiveClass).children().removeClass(settings.tabActiveClass);
+        plugin.tabs.filter("." + settings.tabActiveClass).removeClass(settings.tabActiveClass).children().removeClass(settings.tabActiveClass);
 
         // If panel is collapsed, uncollapse it
         if( $clicked.hasClass(settings.collapsedClass) ){
@@ -339,10 +337,10 @@
     };
 
     plugin.activateTab = function($clicked, $targetPanel, ajaxUrl, callback) {
-      $panels.stop(true,true);
+      plugin.panels.stop(true,true);
 
       if( fire($container,"easytabs:before", [$clicked, $targetPanel, settings]) ){
-        var $visiblePanel = $panels.filter(":visible"),
+        var $visiblePanel = plugin.panels.filter(":visible"),
             $panelContainer = $targetPanel.parent(),
             targetHeight,
             visibleHeight,
@@ -410,11 +408,11 @@
         }
 
         // Change the active tab *first* to provide immediate feedback when the user clicks
-        $tabs.filter("." + settings.tabActiveClass).removeClass(settings.tabActiveClass).children().removeClass(settings.tabActiveClass);
-        $tabs.filter("." + settings.collapsedClass).removeClass(settings.collapsedClass).children().removeClass(settings.collapsedClass);
+        plugin.tabs.filter("." + settings.tabActiveClass).removeClass(settings.tabActiveClass).children().removeClass(settings.tabActiveClass);
+        plugin.tabs.filter("." + settings.collapsedClass).removeClass(settings.collapsedClass).children().removeClass(settings.collapsedClass);
         $clicked.parent().addClass(settings.tabActiveClass).children().addClass(settings.tabActiveClass);
 
-        $panels.filter("." + settings.panelActiveClass).removeClass(settings.panelActiveClass);
+        plugin.panels.filter("." + settings.panelActiveClass).removeClass(settings.panelActiveClass);
         $targetPanel.addClass(settings.panelActiveClass);
 
         if( $visiblePanel.length ) {
@@ -428,11 +426,11 @@
     };
 
     plugin.matchTab = function(hash) {
-      return $tabs.find("[href='" + hash + "'],[data-target='" + hash + "']").first();
+      return plugin.tabs.find("[href='" + hash + "'],[data-target='" + hash + "']").first();
     };
 
     plugin.matchInPanel = function(hash) {
-      return ( hash ? $panels.filter(':has(' + hash + ')').first() : [] );
+      return ( hash ? plugin.panels.filter(':has(' + hash + ')').first() : [] );
     };
 
     plugin.selectTabFromHashChange = function() {
@@ -461,6 +459,8 @@
           } else if ( ! $defaultTab.hasClass(settings.tabActiveClass) && ! settings.cycle ) {
 
             // ...and hash is blank or matches a parent of the tab container
+            // TODO: probably make this also switch to defaultTab if the last tab (before the hash updated) was
+            // one of the other tabs in this container.
             if ( hash === '' || $container.closest(hash).length ) {
               skipUpdateToHash = true;
               plugin.selectTab( $defaultTabLink );
@@ -472,8 +472,8 @@
 
     plugin.cycleTabs = function(tabNumber){
       if(settings.cycle){
-        tabNumber = tabNumber % $tabs.length;
-        $tab = $( $tabs[tabNumber] ).children("a").first();
+        tabNumber = tabNumber % plugin.tabs.length;
+        $tab = $( plugin.tabs[tabNumber] ).children("a").first();
         skipUpdateToHash = true;
         plugin.selectTab( $tab, function() {
           setTimeout(function(){ plugin.cycleTabs(tabNumber + 1); }, settings.cycle);
@@ -498,7 +498,7 @@
     plugin.initCycle = function(){
       var tabNumber;
       if (settings.cycle) {
-        tabNumber = $tabs.index($defaultTab);
+        tabNumber = plugin.tabs.index($defaultTab);
         setTimeout( function(){ plugin.cycleTabs(tabNumber + 1); }, settings.cycle);
       }
     };
@@ -507,16 +507,24 @@
       select: function(tabSelector){
         var $tab;
 
-        if ( ($tab = $tabs.filter(tabSelector)).length === 0 ) {                       // Find tab container that matches selector (like 'li#tab-one' which contains tab link)
-          if ( ($tab = $tabs.find("a[href='" + tabSelector + "']")).length === 0 ) {   // Find direct tab link that matches href (like 'a[href="#panel-1"]')
-            if ( ($tab = $tabs.find("a" + tabSelector)).length === 0 ) {               // Find direct tab link that matches selector (like 'a#tab-1')
-              if ( ($tab = $tabs.find("[data-target='" + tabSelector + "']")).length === 0 ) { // Find direct tab link that matches data-target (lik 'a[data-target="#panel-1"]')
+        // Find tab container that matches selector (like 'li#tab-one' which contains tab link)
+        if ( ($tab = plugin.tabs.filter(tabSelector)).length === 0 ) {
+
+          // Find direct tab link that matches href (like 'a[href="#panel-1"]')
+          if ( ($tab = plugin.tabs.find("a[href='" + tabSelector + "']")).length === 0 ) {
+
+            // Find direct tab link that matches selector (like 'a#tab-1')
+            if ( ($tab = plugin.tabs.find("a" + tabSelector)).length === 0 ) {
+
+              // Find direct tab link that matches data-target (lik 'a[data-target="#panel-1"]')
+              if ( ($tab = plugin.tabs.find("[data-target='" + tabSelector + "']")).length === 0 ) {
                 $.error('Tab \'' + tabSelector + '\' does not exist in tab set');
               }
             }
           }
         } else {
-          $tab = $tab.children("a").first();                                          // Select the child tab link, since the first option finds the tab container (like <li>)
+          // Select the child tab link, since the first option finds the tab container (like <li>)
+          $tab = $tab.children("a").first();
         }
         plugin.selectTab($tab);
       }
@@ -527,13 +535,15 @@
   };
 
   $.fn.easytabs = function(options) {
+    var args = arguments;
     return this.each(function() {
-      var $this = $(this);
+      var $this = $(this),
+          plugin = $this.data('easytabs');
 
       // Initialization was called with $(el).easytabs( { options } );
-      if (undefined == $this.data('dynatable')) {
-        var plugin = new $.easytabs(this, options);
-        $this.data('dynatable', plugin);
+      if (undefined === plugin) {
+        plugin = new $.easytabs(this, options);
+        $this.data('easytabs', plugin);
       }
 
       // User called public method
