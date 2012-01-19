@@ -49,5 +49,6 @@
       "url": "http://www.gnu.org/licenses/gpl.html"
     }
   ],
-  "homepage": "http://www.alfajango.com/blog/jquery-easytabs-plugin/"
+  "homepage": "http://www.alfajango.com/blog/jquery-easytabs-plugin/",
+  "main": "/lib/jquery.easytabs.min.js"
 }
