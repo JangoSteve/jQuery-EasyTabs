@@ -27,23 +27,13 @@
     "address": ""
   },
   "demos": [
-    "/examples/basic.html",
-    "/examples/bottom.html",
-    "/examples/collapsible-and-cancel.html",
-    "/examples/disconnected.html",
-    "/examples/height-and-transition-options.html",
-    "/examples/multiple.html",
-    "/examples/nested.html",
-    "/examples/side.html",
-    "/examples/non-div-panesl.html",
-    "/examples/prev-next.html",
-    "/examples/ajax.html"
+    "/examples/demo.html"
   ],
   "bugs": {
     "mail": "support@alfajango.com",
     "web": "https://github.com/jangosteve/jquery-easytabs/issues"
   },
-  "repositories"	: [
+  "repositories": [
     {
       "type": "git",
       "url": "https://github.com/jangosteve/jquery-easytabs.git"
