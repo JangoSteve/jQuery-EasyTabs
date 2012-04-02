@@ -49,6 +49,9 @@ describe('easytabs', function() {
     xit('makes tab from url hash active instead of default tab', function() {
     });
 
+    xit('selects default tab when hash updated to blank (i.e. back button hit to initial page load state', function() {
+    });
+
   });
 
   describe('disconnected tabs and panels', function() {
