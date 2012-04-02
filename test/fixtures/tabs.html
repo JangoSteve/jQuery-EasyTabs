@@ -1,0 +1,77 @@
+<div id="tab-container" class='tab-container'>
+ <ul class='etabs'>
+   <li class='tab'><a href="#tabs1-html">HTML Markup</a></li>
+   <li class='tab'><a href="#tabs1-js">Required JS</a></li>
+   <li class='tab'><a href="#tabs1-css">Example CSS</a></li>
+ </ul>
+ <div class='panel-container'>
+  <div id="tabs1-html">
+   <h2>HTML Markup for these tabs</h2>
+
+  <pre>
+    <code>
+&lt;div id="tab-container" class="tab-container"&gt;
+  &lt;ul class='etabs'&gt;
+    &lt;li class='tab'&gt;&lt;a href="#tabs1-html"&gt;HTML Markup&lt;/a&gt;&lt;/li&gt;
+    &lt;li class='tab'&gt;&lt;a href="#tabs1-js"&gt;Required JS&lt;/a&gt;&lt;/li&gt;
+    &lt;li class='tab'&gt;&lt;a href="#tabs1-css"&gt;Example CSS&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div id="tabs1-html"&gt;
+    &lt;h2&gt;HTML Markup for these tabs&lt;/h2&gt;
+    &lt;!-- content --&gt;
+  &lt;/div&gt;
+  &lt;div id="tabs1-js"&gt;
+    &lt;h2&gt;JS for these tabs&lt;/h2&gt;
+    &lt;!-- content --&gt;
+  &lt;/div&gt;
+  &lt;div id="tabs1-css"&gt;
+    &lt;h2&gt;CSS Styles for these tabs&lt;/h2&gt;
+    &lt;!-- content --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+    </code>
+  </pre>
+
+   <p>The HTML markup for your tabs and content can be arranged however you want. At the minimum, you need a container, a collection of links for your tabs (an unordered list by default), and matching divs for your tabbed content. Make sure the tab <code>href</code> attributes match the
+<code>id</code> of the target panel. This is standard semantic markup for in-page anchors.</p>
+   <p>The class names above are just to make it easy to style. You can make them whatever you want, there's no magic here.</p>
+  </div>
+   <div id="tabs1-js">
+   <h2>JS for these tabs</h2>
+
+   <pre>
+    <code>
+&lt;script src="/javascripts/jquery.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="/javascripts/jquery.hashchange.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="/javascripts/jquery.easytabs.js" type="text/javascript"&gt;&lt;/script&gt;
+    </code>
+  </pre>
+
+   <p>Optionally include the jquery <a href="http://benalman.com/projects/jquery-hashchange-plugin/">hashchange plugin</a> (recommended) or <a href="http://www.asual.com/jquery/address/docs/">address plugin</a> to enable forward-
+and back-button functionality.</p>
+
+  <pre>
+    <code>
+$('#tab-container').easytabs();
+    </code>
+  </pre>
+
+  </div>
+  <div id="tabs1-css">
+   <h2>CSS Styles for these tabs</h2>
+
+  <code>
+    <pre>
+.etabs { margin: 0; padding: 0; }
+.tab { display: inline-block; zoom:1; *display:inline; background: #eee; border: solid 1px #999; border-bottom: none; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; }
+.tab a { font-size: 14px; line-height: 2em; display: block; padding: 0 10px; outline: none; }
+.tab a:hover { text-decoration: underline; }
+.tab.active { background: #fff; padding-top: 6px; position: relative; top: 1px; border-color: #666; }
+.tab a.active { font-weight: bold; }
+.tab-container .panel-container { background: #fff; border: solid #666 1px; padding: 10px; -moz-border-radius: 0 4px 4px 4px; -webkit-border-radius: 0 4px 4px 4px; }
+    </pre>
+  </code>
+
+  </div>
+ </div>
+</div>
