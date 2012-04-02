@@ -18,6 +18,19 @@ describe('easytabs', function() {
       expect(fixture).toBeEasyTabs();
     });
 
+    it('should have tabs', function() {
+      expect(fixture).toHaveTabs('[href="#tabs1-html"]');
+      expect(fixture).toHaveTabs('[href="#tabs1-html"]');
+      expect(fixture).toHaveTabs('[href="#tabs1-js"]');
+      expect(fixture).toHaveTabs('[href="#tabs1-css"]');
+    });
+
+    it('should have panels', function() {
+      expect(fixture).toHavePanels('#tabs1-html');
+      expect(fixture).toHavePanels('#tabs1-js');
+      expect(fixture).toHavePanels('#tabs1-css');
+    });
+
   });
 
 });
