@@ -31,13 +31,23 @@ describe('easytabs', function() {
       expect(fixture).toHavePanels('#tabs1-css');
     });
 
-    xit('makes first tab the default', function() {
+    it('makes first tab active by default', function() {
+      expect( $('[href="#tabs1-html"]').first() ).toHaveClass('active');
     });
 
-    xit('makes all but default panel hidden', function() {
+    it('makes all but default panel hidden', function() {
+      var panel = $('#tabs1-html');
+      expect(panel).toHaveClass('active');
+      expect(panel).toBe(':visible');
     });
 
-    xit('makes default tab active', function() {
+    it('hides all but active panel', function() {
+      var activePanel = $('#tabs1-html'),
+          otherPanels = fixture.data('easytabs').panels.not(activePanel);
+
+      otherPanels.each(function() {
+        expect( $(this) ).not.toBe(':visible');
+      });
     });
 
     xit('updates url hash', function() {
