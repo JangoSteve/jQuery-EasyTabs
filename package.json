@@ -20,7 +20,7 @@
     }
   ],
   "dependencies": {
-    "jquery": ""
+    "jquery": ["1.4.3","1.5","1.6","1.7"]
   },
   "optionalDependencies": {
     "hashchange": "",
