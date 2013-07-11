@@ -1,0 +1,56 @@
+{
+  "name": "EasyTabs",
+  "title": "jQuery EasyTabs - Tabs with(out) style.",
+  "description": "EasyTabs is a lightweight jQuery plugin to provide full tab functionality, while leaving the styling up to you.",
+  "version": "3.2.0",
+  "author": {
+    "name": "Steve Schwartz",
+    "email": "steve@alfajango.com",
+    "web": "http://www.alfajango.com/blog"
+  },
+  "keywords": [
+    "tabs", "cycle", "gallery"
+  ],
+  "maintainers": [
+    {
+      "name": "Steve Schwartz",
+      "email": "steve@alfajango.com",
+      "web": "http://www.alfajango.com/blog"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Steve Schwartz",
+      "email": "steve@alfajango.com",
+      "web": "http://www.alfajango.com/blog"
+    }
+  ],
+  "dependencies": {
+    "jquery": ["1.4.3","1.5","1.6","1.7","1.8","1.9","1.10"]
+  },
+  "optionalDependencies": {
+    "hashchange": "",
+    "address": ""
+  },
+  "demo": "http://jspkg.com/packages/easytabs/demos",
+  "download": "http://jspkg.com/packages/easytabs",
+  "bugs": "https://github.com/jangosteve/jquery-easytabs/issues",
+  "docs": "http://os.alfajango.com/easytabs/",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/jangosteve/jquery-easytabs.git"
+    }
+  ],
+  "licenses": [
+    {
+      "name": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    },
+    {
+      "name": "GPL",
+      "url": "http://www.gnu.org/licenses/gpl.html"
+    }
+  ],
+  "homepage": "http://www.alfajango.com/blog/jquery-easytabs-plugin/"
+}
