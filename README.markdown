@@ -47,37 +47,41 @@ Institute.
 
 Unlike JQuery UI tabs, the HTML markup for your tabs and content can be arranged however you want. At the minimum, you need a container, an unordered list of links for your tabs, and matching divs for your tabbed content.
 
-    <div id="tab-container">
-      <ul>
-        <li><a href="#tab-1-div">Tab 1</a></li>
-        <li><a href="#that-other-tab">The Second Tab</a></li>
-        <li><a href="#lastly">Tab C</a></li>
-      </ul>
-      <div id="tab-1-div">
-        <h2>Heading 1</h2>
-        <p>This is the content of the first tab.</p>
-      </div>
-        <div id="that-other-tab">
-        <h2>Heading 2</h2>
-        <p>Stuff from the second tab.</p>
-      </div>
-      <div id="lastly">
-        <h2>Heading 3</h2>
-        <p>More stuff from the last tab.</p>
-      </div>
-    </div>
+```html
+<div id="tab-container">
+  <ul>
+    <li><a href="#tab-1-div">Tab 1</a></li>
+    <li><a href="#that-other-tab">The Second Tab</a></li>
+    <li><a href="#lastly">Tab C</a></li>
+  </ul>
+  <div id="tab-1-div">
+    <h2>Heading 1</h2>
+    <p>This is the content of the first tab.</p>
+  </div>
+    <div id="that-other-tab">
+    <h2>Heading 2</h2>
+    <p>Stuff from the second tab.</p>
+  </div>
+  <div id="lastly">
+    <h2>Heading 3</h2>
+    <p>More stuff from the last tab.</p>
+  </div>
+</div>
+```
 
 ### The Javascript
 
 To enable back- and forward-button support for the users' browsers, be sure to include either the [jQuery HashChange plugin](http://benalman.com/projects/jquery-hashchange-plugin/) (recommended) or the [Address plugin](http://www.asual.com/jquery/address/docs/) before including the EasyTabs plugin. There is no other configuration required, it will just work!
 
-    <script src="/javascripts/jquery.js" type="text/javascript"></script> 
-    <script src="/javascripts/jquery.hashchange.js" type="text/javascript"></script> 
-    <script src="/javascripts/jquery.easytabs.js" type="text/javascript"></script>  
-    
-    <script type="text/javascript"> 
-      $(document).ready(function(){ $('#tab-container').easytabs(); });
-    </script> 
+```html
+<script src="/javascripts/jquery.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.hashchange.js" type="text/javascript"></script>
+<script src="/javascripts/jquery.easytabs.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+  $(document).ready(function(){ $('#tab-container').easytabs(); });
+</script>
+```
 
 I varied the tab ids and names just to show you how flexible this is. There is no magic going on with this plugin; it's not trying to guess the order of your tabs or what tab is associated with which `<div>`. Just make the id of the content `<div>` match the href of the tab link.
 
@@ -93,32 +97,34 @@ The only rules you need to follow are these:
 * the container div also contains content divs (for the tabbed content), each div has a unique id that matches the href property of a link in the unordered list
 
 Other than that, go nuts. The order of the elements does NOT matter. Your `<ul>` could be before or after the content divs (or even between them). You can put non-tabbed content between the elements. It doesn't matter. The most common structure (for inspiration's sake) is something like this:
-
-    div#tab-container ul > ( li > a[href="tab-1"], li > a[href="second-tab"] )
-    div#tab-container div#tab-1
-    div#tab-container div#second-tab
-
-    +---------------------------------------------------------------------------+
-    |                              div#tab-container                            |
-    |  +---------------------------------------------------------------------+  |
-    |  |                                  ul                                 |  |
-    |  |  +-----------------------------+    +----------------------------+  |  |
-    |  |  |             li              |    |             li             |  |  |
-    |  |  |  +-----------------------+  |    |  +----------------------+  |  |  |
-    |  |  |  |    a[href="tab-1"]    |  |    |  | a[href="second-tab"] |  |  |  |
-    |  |  |  +-----------------------+  |    |  +----------------------+  |  |  |
-    |  |  +-----------------------------+    +----------------------------+  |  |
-    |  +---------------------------------------------------------------------+  |
-    |                                                                           |
-    |  +---------------------------------------------------------------------+  |
-    |  |                               div#tab-1                             |  |
-    |  +---------------------------------------------------------------------+  |
-    |                                                                           |
-    |  +---------------------------------------------------------------------+  |
-    |  |                             div#second-tab                          |  |
-    |  +---------------------------------------------------------------------+  |
-    |                                                                           |
-    +---------------------------------------------------------------------------+
+```css
+div#tab-container ul > ( li > a[href="tab-1"], li > a[href="second-tab"] )
+div#tab-container div#tab-1
+div#tab-container div#second-tab
+```
+```
++---------------------------------------------------------------------------+
+|                              div#tab-container                            |
+|  +---------------------------------------------------------------------+  |
+|  |                                  ul                                 |  |
+|  |  +-----------------------------+    +----------------------------+  |  |
+|  |  |             li              |    |             li             |  |  |
+|  |  |  +-----------------------+  |    |  +----------------------+  |  |  |
+|  |  |  |    a[href="tab-1"]    |  |    |  | a[href="second-tab"] |  |  |  |
+|  |  |  +-----------------------+  |    |  +----------------------+  |  |  |
+|  |  +-----------------------------+    +----------------------------+  |  |
+|  +---------------------------------------------------------------------+  |
+|                                                                           |
+|  +---------------------------------------------------------------------+  |
+|  |                               div#tab-1                             |  |
+|  +---------------------------------------------------------------------+  |
+|                                                                           |
+|  +---------------------------------------------------------------------+  |
+|  |                             div#second-tab                          |  |
+|  +---------------------------------------------------------------------+  |
+|                                                                           |
++---------------------------------------------------------------------------+
+```
 
 -------------------------------------------------------------------------------------------
 
