@@ -51,5 +51,5 @@
     }
   ],
   "homepage": "http://www.alfajango.com/blog/jquery-easytabs-plugin/",
-  "main": "/lib/jquery.easytabs.min.js"
+  "main": "./lib/jquery.easytabs.min.js"
 }
