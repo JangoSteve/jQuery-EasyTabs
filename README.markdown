@@ -47,23 +47,25 @@ Institute.
 
 Unlike JQuery UI tabs, the HTML markup for your tabs and content can be arranged however you want. At the minimum, you need a container, an unordered list of links for your tabs, and matching divs for your tabbed content.
 
-    <div id="tab-container">
-      <ul>
+    <div id="tab-container" class="tab-container">
+      <ul class="tabs">
         <li><a href="#tab-1-div">Tab 1</a></li>
         <li><a href="#that-other-tab">The Second Tab</a></li>
         <li><a href="#lastly">Tab C</a></li>
       </ul>
-      <div id="tab-1-div">
-        <h2>Heading 1</h2>
-        <p>This is the content of the first tab.</p>
-      </div>
-        <div id="that-other-tab">
-        <h2>Heading 2</h2>
-        <p>Stuff from the second tab.</p>
-      </div>
-      <div id="lastly">
-        <h2>Heading 3</h2>
-        <p>More stuff from the last tab.</p>
+      <div class='panel-container'>
+        <div id="tab-1-div">
+          <h2>Heading 1</h2>
+          <p>This is the content of the first tab.</p>
+        </div>
+          <div id="that-other-tab">
+          <h2>Heading 2</h2>
+          <p>Stuff from the second tab.</p>
+        </div>
+        <div id="lastly">
+          <h2>Heading 3</h2>
+          <p>More stuff from the last tab.</p>
+        </div>
       </div>
     </div>
 
